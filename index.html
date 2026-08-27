@@ -67,7 +67,7 @@
       display:none;opacity:0;
       transition:opacity 3s ease;
     }
-    #bg-tree-canvas.visible{opacity:.85}
+    #bg-tree-canvas.visible{opacity:.5}
 
     /* ── АУДИО ПЛЕЕР ─────────────────────────────────── */
     #music-toggle{
@@ -208,6 +208,7 @@
     #main-content.visible { display: block; }
 
     .hero-section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:110px 18px 70px;position:relative}
+    .hero-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center, rgba(255,248,243,0.88) 0%, rgba(255,248,243,0.4) 40%, transparent 70%);z-index:-1;pointer-events:none}
     .hero-badge{display:inline-block;background:rgba(255,255,255,.9);border:1px solid var(--rose);color:var(--burg);font-family:var(--fb);font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;padding:7px 20px;border-radius:var(--rf);box-shadow:var(--sh);margin-bottom:24px;font-weight:700}
     .hero-title{font-family:var(--fd);font-size:clamp(2.9rem,8.5vw,6.4rem);font-weight:700;line-height:1.06;color:var(--burg);letter-spacing:.02em;margin-bottom:12px}
     .hero-title .hl{background:linear-gradient(135deg,#8C2643,#C45070,var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -707,7 +708,7 @@
 
       var cfg = mode === 'locked'
         ? { trunkH:.55, maxD:6, lMin:6, lMax:12, speed:.0020, fallRate:.35, strokeAlpha:.9  }
-        : { trunkH:.40, maxD:6, lMin:5, lMax:10, speed:.0030, fallRate:.18, strokeAlpha:.75 };
+        : { trunkH:.40, maxD:6, lMin:5, lMax:10, speed:.0030, fallRate:.18, strokeAlpha:.35 };
 
       function measure(){
         if(mode==='locked'){
@@ -757,7 +758,7 @@
             if(Math.random()>.32) brnch(x2,y2,len*.63,angle+(Math.random()-.5)*.32,width*.62,depth+1,delay+.10);
           }
         }
-        brnch(W*.5, H*1.02, tLen, 0, mode==='locked'?24:18, 1, 0);
+        brnch(W*.5, H*1.02, tLen, 0, mode==='locked'?24:10, 1, 0);
       }
 
       function drawHeart(x,y,size,color,rot,alpha){
