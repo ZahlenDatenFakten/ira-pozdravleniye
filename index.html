@@ -48,8 +48,20 @@
     #bg-tree-canvas.visible{opacity:1}
 
     /* ============================================================
-       LOCKED SCREEN — Midnight Cinema Aesthetic
+       LOCKED SCREEN — Midnight Cinema
     ============================================================ */
+    #intro-screen {
+      position: fixed; inset: 0; z-index: 99999;
+      display: flex; align-items: center; justify-content: center;
+      background: #050505; color: #FFF; cursor: pointer;
+      transition: opacity 1s var(--ease), visibility 1s;
+    }
+    .intro-pulse {
+      font-family: var(--fb); font-size: 0.85rem; letter-spacing: 0.3em; text-transform: uppercase;
+      animation: pulse 2s infinite cubic-bezier(.4,0,.6,1);
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
     #locked-screen {
       position: fixed; inset: 0; z-index: 9000;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -69,6 +81,13 @@
       z-index: 1; pointer-events:none;
     }
     .ls-top, .ls-bottom { position: relative; z-index: 2; }
+
+    /* Cinematic Intro Classes */
+    .cinematic-hidden { opacity: 0; transform: translateY(30px); }
+    .cinematic-reveal { opacity: 1; transform: translateY(0); transition: opacity 1.6s cubic-bezier(0.23,1,0.32,1), transform 1.6s cubic-bezier(0.23,1,0.32,1); }
+    .char-hidden { opacity: 0; transform: translateY(20px) scale(0.9); display: inline-block; }
+    .char-reveal { opacity: 1; transform: translateY(0) scale(1); transition: opacity 0.8s cubic-bezier(0.23,1,0.32,1), transform 0.8s cubic-bezier(0.23,1,0.32,1); display: inline-block; }
+
     #locked-screen.unlocking {
       opacity: 0; filter: blur(12px); pointer-events: none;
     }
@@ -282,7 +301,7 @@
       var i=document.getElementById('pass-input');
       var val=i ? i.value.trim().toLowerCase() : '';
       var err=document.getElementById('pass-error');
-      if(val==='1909'||val==='ирочка'||val==='21'){
+      if(val==='irapozdravlyayu'){
         SafeStorage.set('ira_ok','yes');
         closeSecretModal();
         unlockWebsite(true);
@@ -292,7 +311,45 @@
       }
     }
 
+    function startCinematicIntro(){
+      var intro = document.getElementById('intro-screen');
+      if(intro){ intro.style.opacity = '0'; intro.style.visibility = 'hidden'; }
+      var sfxR = document.getElementById('sfx-reveal');
+      var sfxW = document.getElementById('sfx-writing');
+      if(sfxR) sfxR.play().catch(function(){});
+
+      if(window._lockedTree && window._lockedTree.startIfNeeded) window._lockedTree.startIfNeeded();
+
+      var title = document.getElementById('ls-title');
+      if(title){
+        var text = title.textContent;
+        title.innerHTML = '';
+        for(var i=0; i<text.length; i++){
+          var s = document.createElement('span');
+          s.className = 'char-hidden';
+          s.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+          title.appendChild(s);
+        }
+        var chars = title.querySelectorAll('span');
+        setTimeout(function(){
+          if(sfxW) sfxW.play().catch(function(){});
+          chars.forEach(function(c, i){
+            setTimeout(function(){ c.classList.replace('char-hidden', 'char-reveal'); }, i*80);
+          });
+        }, 600);
+      }
+
+      setTimeout(function(){
+        ['ls-top', 'cd-grid', 'ls-btn'].forEach(function(id){
+          var el = document.getElementById(id);
+          if(el) el.classList.replace('cinematic-hidden', 'cinematic-reveal');
+        });
+      }, 200);
+    }
+
     function unlockWebsite(anim){
+      var intro=document.getElementById('intro-screen');
+      if(intro) intro.style.display='none';
       var ls=document.getElementById('locked-screen');
       var mc=document.getElementById('main-content');
       var bb=document.getElementById('back-btn');
@@ -334,6 +391,15 @@
 </head>
 <body>
 
+  <!-- АУДИО SFX -->
+  <audio id="sfx-writing" src="sfx_writing.mp3" preload="auto"></audio>
+  <audio id="sfx-reveal" src="sfx_reveal.mp3" preload="auto"></audio>
+
+  <!-- INTRO SCREEN -->
+  <div id="intro-screen" onclick="startCinematicIntro()">
+    <div class="intro-pulse">Коснитесь экрана</div>
+  </div>
+
   <!-- Фоновые лепестки -->
   <canvas id="petals-canvas"></canvas>
 
@@ -350,20 +416,20 @@
     <!-- Масштабное дерево на фон -->
     <canvas id="locked-tree-canvas"></canvas>
 
-    <div class="ls-top">
+    <div class="ls-top cinematic-hidden" id="ls-top">
       <div class="ls-sub">Секретный сюрприз</div>
-      <h1 class="ls-title">Воспоминания</h1>
+      <h1 class="ls-title" id="ls-title">Воспоминания</h1>
       <div class="ls-sub">Откроется <strong>19 сентября 2026</strong></div>
     </div>
 
     <div class="ls-bottom">
-      <div class="cd-grid">
+      <div class="cd-grid cinematic-hidden" id="cd-grid">
         <div class="cd-card"><span class="cd-val" id="cd-d">23</span><span class="cd-lbl">Дней</span></div>
         <div class="cd-card"><span class="cd-val" id="cd-h">00</span><span class="cd-lbl">Часов</span></div>
         <div class="cd-card"><span class="cd-val" id="cd-m">00</span><span class="cd-lbl">Минут</span></div>
         <div class="cd-card"><span class="cd-val" id="cd-s">00</span><span class="cd-lbl">Секунд</span></div>
       </div>
-      <button class="ls-unlock-btn" onclick="event.stopPropagation(); openSecretPrompt()">Ввести ключ</button>
+      <button class="ls-unlock-btn cinematic-hidden" id="ls-btn" onclick="event.stopPropagation(); openSecretPrompt()">Ввести ключ</button>
     </div>
   </div>
 
@@ -751,14 +817,14 @@
       if(window.ResizeObserver && target){
         var ro = new ResizeObserver(function(){
           if(!running && target.clientWidth > 0){
-            self.startIfNeeded();
+            if(mode !== 'locked') self.startIfNeeded();
             ro.disconnect();
           }
         });
         ro.observe(target);
       }
       // Запасной вариант
-      setTimeout(function(){ self.startIfNeeded(); }, 100);
+      setTimeout(function(){ if(mode !== 'locked') self.startIfNeeded(); }, 100);
     }
 
     // Инициализация дерева таймера
