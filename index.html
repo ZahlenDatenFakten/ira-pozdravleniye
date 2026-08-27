@@ -340,16 +340,18 @@
         var chars = title.querySelectorAll('span');
         setTimeout(function(){
           if(sfxW) sfxW.play().catch(function(){});
-          chars.forEach(function(c, i){
-            setTimeout(function(){ c.classList.replace('char-hidden', 'char-reveal'); }, i*80);
-          });
+          for(var i=0; i<chars.length; i++){
+            (function(c, i){
+              setTimeout(function(){ c.classList.remove('char-hidden'); c.classList.add('char-reveal'); }, i*80);
+            })(chars[i], i);
+          }
         }, 600);
       }
 
       setTimeout(function(){
         ['ls-top', 'cd-grid', 'ls-btn'].forEach(function(id){
           var el = document.getElementById(id);
-          if(el) el.classList.replace('cinematic-hidden', 'cinematic-reveal');
+          if(el) { el.classList.remove('cinematic-hidden'); el.classList.add('cinematic-reveal'); }
         });
       }, 200);
     }
