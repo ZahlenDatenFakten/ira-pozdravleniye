@@ -8,163 +8,202 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
   <style>
+    /* ── ПЕРЕМЕННЫЕ ─────────────────────────────────── */
     :root {
-      --burgundy: #5C1A2E;
-      --deep:     #431221;
-      --rose:     #D88C9A;
-      --roselit:  #EBB5BF;
-      --blush:    #F7E1E5;
-      --gold:     #C9A86A;
-      --cream:    #FFF8F3;
-      --muted:    #7E4F5D;
-      --dark:     #36101D;
-      --sh-soft:  0 10px 30px rgba(92,26,46,.08);
-      --sh-ro:    0 18px 45px rgba(92,26,46,.16), 0 0 25px rgba(216,140,154,.25);
-      --r-sm: 12px; --r-md: 20px; --r-lg: 32px; --rf: 9999px;
-      --ease: cubic-bezier(0.23,1,0.32,1);
-      --fd: 'Playfair Display', serif;
-      --fs: 'Cormorant Garamond', serif;
-      --fb: 'Nunito', sans-serif;
-      --fsc: 'Caveat', cursive;
+      --burg:  #5C1A2E;
+      --deep:  #431221;
+      --rose:  #D88C9A;
+      --rosel: #EBB5BF;
+      --blush: #F7E1E5;
+      --gold:  #C9A86A;
+      --cream: #FFF8F3;
+      --muted: #7E4F5D;
+      --dark:  #36101D;
+      --sh:    0 10px 30px rgba(92,26,46,.09);
+      --shr:   0 18px 45px rgba(92,26,46,.17), 0 0 26px rgba(216,140,154,.26);
+      --rsm: 12px; --rmd: 20px; --rlg: 32px; --rf: 9999px;
+      --ease: cubic-bezier(.23,1,.32,1);
+      --fd: 'Playfair Display',serif;
+      --fs: 'Cormorant Garamond',serif;
+      --fb: 'Nunito',sans-serif;
+      --fsc: 'Caveat',cursive;
     }
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     html{scroll-behavior:smooth}
     body{font-family:var(--fb);background:var(--cream);overflow-x:hidden;color:var(--dark)}
-    ::selection{background:var(--roselit);color:var(--deep)}
+    ::selection{background:var(--rosel);color:var(--deep)}
 
-    /* ЛЕПЕСТКИ */
+    /* ── ЛЕПЕСТКИ ────────────────────────────────────── */
     #petals-canvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1}
 
-    /* ── ФОНОВОЕ ДЕРЕВО ПОЗДРАВЛЕНИЯ ── */
-    #bg-tree-canvas {
-      position: fixed; inset: 0;
-      width: 100vw; height: 100vh;
-      pointer-events: none;
-      z-index: 2; /* под контентом */
-      display: none;
-      opacity: 0;
-      transition: opacity 3.5s ease;
+    /* ── ФОНОВОЕ ДЕРЕВО ПОЗДРАВЛЕНИЯ ─────────────────── */
+    #bg-tree-canvas{
+      position:fixed;inset:0;width:100vw;height:100vh;
+      pointer-events:none;z-index:2;
+      display:none;opacity:0;
+      transition:opacity 3s ease;
     }
-    #bg-tree-canvas.visible { opacity: 1; }
+    #bg-tree-canvas.visible{opacity:1}
 
     /* ============================================================
-       ЭКРАН ВХОДА
+       LOCKED SCREEN — видно сразу, дерево на весь фон
     ============================================================ */
-    #enter-screen {
-      position: fixed; inset: 0; z-index: 99999;
-      background: radial-gradient(ellipse at 50% 38%, #fff0f5 0%, #fff8f3 55%, #fdf0de 100%);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: opacity .9s var(--ease), transform .9s var(--ease);
-    }
-    #enter-screen.leaving{opacity:0;transform:scale(1.06);pointer-events:none}
-
-    @keyframes efloat{0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-13px) scale(1.04)}}
-    @keyframes pring{0%{transform:scale(.85);opacity:.75} 100%{transform:scale(1.22);opacity:0}}
-    @keyframes shimmer{0%,100%{opacity:.72} 50%{opacity:1}}
-
-    .enter-hw{position:relative;width:clamp(130px,26vw,175px);height:clamp(130px,26vw,175px);margin-bottom:26px;animation:efloat 3s ease-in-out infinite}
-    .enter-ring{position:absolute;inset:-18px;border:2px solid rgba(216,140,154,.52);border-radius:50%;animation:pring 2s ease-out infinite}
-    .enter-ring:nth-child(2){animation-delay:.7s}
-    .enter-ring:nth-child(3){animation-delay:1.4s}
-    .enter-he{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(70px,15vw,108px);filter:drop-shadow(0 8px 20px rgba(92,26,46,.22))}
-    .enter-title{font-family:var(--fd);font-size:clamp(1.65rem,4.5vw,2.7rem);color:var(--burgundy);margin-bottom:9px;text-align:center}
-    .enter-sub{font-size:clamp(.88rem,2vw,1.07rem);color:var(--muted);text-align:center;margin-bottom:30px;line-height:1.5;max-width:340px;padding:0 16px}
-    .enter-btn{background:linear-gradient(135deg,var(--burgundy),#8c2643);color:#fff;border:none;padding:clamp(12px,2.4vw,16px) clamp(26px,5vw,46px);border-radius:var(--rf);font-family:var(--fb);font-size:clamp(1rem,2.2vw,1.18rem);font-weight:700;cursor:pointer;box-shadow:0 11px 28px rgba(92,26,46,.30);animation:shimmer 2s ease-in-out infinite;transition:transform .2s}
-    .enter-btn:hover{transform:scale(1.04)}
-    .enter-note{margin-top:16px;font-size:.8rem;color:var(--muted);opacity:.72;display:flex;align-items:center;gap:5px}
-
-    /* ============================================================
-       LOCKED SCREEN — ДЕРЕВО НА ПОЛНЫЙ ФОН
-    ============================================================ */
-    #locked-screen {
-      position: fixed; inset: 0; z-index: 9000;
-      display: none; /* показываем после enter-screen */
-      flex-direction: column;
-      align-items: center; justify-content: space-between;
-      overflow: hidden;
-      transition: opacity .85s var(--ease), transform .85s var(--ease);
+    #locked-screen{
+      position:fixed;inset:0;z-index:9000;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:space-between;
+      overflow:hidden;
+      background:radial-gradient(ellipse at 50% 20%,#fff4f7 0%,#fff8f3 55%,#fdf0de 100%);
+      transition:opacity .85s var(--ease),transform .85s var(--ease);
     }
     #locked-screen.unlocking{opacity:0;transform:scale(1.04);pointer-events:none}
 
-    /* Холст-дерево — абсолютный, на весь locked-screen */
-    #locked-tree-canvas {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      display: block; z-index: 0;
+    /* Дерево — абсолютный холст на весь locked-screen */
+    #locked-tree-canvas{
+      position:absolute;inset:0;
+      width:100%;height:100%;
+      display:block;z-index:0;
+      opacity:.78; /* полупрозрачное — просвечивает фон */
     }
 
-    /* Градиентный overlay снизу, чтобы таймер читался */
-    #locked-screen::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 55%;
-      background: linear-gradient(to top,
-        rgba(255,248,243,.96) 0%,
-        rgba(255,248,243,.70) 40%,
+    /* Градиент снизу для читаемости таймера */
+    #locked-screen::after{
+      content:'';
+      position:absolute;bottom:0;left:0;right:0;
+      height:52%;
+      background:linear-gradient(to top,
+        rgba(255,248,243,.97) 0%,
+        rgba(255,248,243,.65) 44%,
         transparent 100%);
-      z-index: 1; pointer-events: none;
+      z-index:1;pointer-events:none;
+    }
+    /* Градиент сверху — мягко скрывает начало дерева за шапкой */
+    #locked-screen::before{
+      content:'';
+      position:absolute;top:0;left:0;right:0;
+      height:28%;
+      background:linear-gradient(to bottom,
+        rgba(255,248,243,.88) 0%,
+        transparent 100%);
+      z-index:1;pointer-events:none;
     }
 
-    /* Контент над деревом */
-    .ls-header {
-      position: relative; z-index: 2;
-      text-align: center; max-width: 640px; width: 100%;
-      padding: 22px 16px 0;
+    /* Контент поверх дерева */
+    .ls-top{
+      position:relative;z-index:2;
+      text-align:center;max-width:640px;width:100%;
+      padding:22px 18px 0;
     }
-    .ls-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 17px;background:rgba(255,255,255,.88);border:1px solid var(--roselit);border-radius:var(--rf);font-size:.79rem;font-weight:700;color:var(--burgundy);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;box-shadow:var(--sh-soft)}
-    .ls-title{font-family:var(--fd);font-size:clamp(1.75rem,5vw,2.9rem);color:var(--burgundy);margin-bottom:5px}
-    .ls-sub{font-size:clamp(.86rem,2vw,1rem);color:var(--muted);line-height:1.5}
+    .ls-badge{
+      display:inline-flex;align-items:center;gap:7px;
+      padding:5px 17px;
+      background:rgba(255,255,255,.88);
+      border:1px solid var(--rosel);border-radius:var(--rf);
+      font-size:.79rem;font-weight:700;color:var(--burg);
+      text-transform:uppercase;letter-spacing:.08em;
+      margin-bottom:8px;box-shadow:var(--sh);
+    }
+    .ls-title{
+      font-family:var(--fd);font-size:clamp(1.8rem,5vw,3rem);
+      color:var(--burg);margin-bottom:5px;
+    }
+    .ls-sub{font-size:clamp(.86rem,2vw,1.02rem);color:var(--muted);line-height:1.52}
 
-    .ls-footer {
-      position: relative; z-index: 2;
-      width: 100%; max-width: 620px; text-align: center;
-      padding: 0 16px 22px;
+    /* Музыкальная подсказка */
+    .music-hint{
+      display:inline-flex;align-items:center;gap:6px;
+      margin-top:10px;
+      font-size:.8rem;color:var(--muted);
+      background:rgba(255,255,255,.78);
+      padding:4px 13px;border-radius:var(--rf);
+      border:1px dashed var(--rosel);
+    }
+    @keyframes note-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+    .music-note{display:inline-block;animation:note-pulse 1.8s ease-in-out infinite}
+
+    /* Таймер */
+    .ls-bottom{
+      position:relative;z-index:2;
+      width:100%;max-width:620px;
+      text-align:center;padding:0 16px 22px;
     }
     .cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(6px,1.8vw,13px);margin-bottom:13px}
-    .cd-card{background:rgba(255,255,255,.92);border:1.5px solid rgba(201,168,106,.38);border-radius:var(--r-md);padding:clamp(8px,1.8vw,13px) 4px;box-shadow:0 6px 18px rgba(92,26,46,.07);display:flex;flex-direction:column;align-items:center;backdrop-filter:blur(6px)}
-    .cd-val{font-family:var(--fd);font-size:clamp(1.65rem,4.2vw,2.6rem);font-weight:700;color:var(--burgundy);line-height:1}
+    .cd-card{
+      background:rgba(255,255,255,.90);
+      border:1.5px solid rgba(201,168,106,.38);
+      border-radius:var(--rmd);
+      padding:clamp(9px,1.9vw,14px) 4px;
+      box-shadow:0 6px 18px rgba(92,26,46,.08);
+      display:flex;flex-direction:column;align-items:center;
+      backdrop-filter:blur(8px);
+    }
+    .cd-val{font-family:var(--fd);font-size:clamp(1.7rem,4.3vw,2.7rem);font-weight:700;color:var(--burg);line-height:1}
     .cd-lbl{font-size:clamp(.62rem,1.5vw,.76rem);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:2px}
-    .ls-unlock-btn{background:rgba(255,255,255,.92);border:1.5px dashed var(--rose);color:var(--burgundy);font-family:var(--fb);font-size:.86rem;font-weight:700;padding:9px 19px;border-radius:var(--rf);cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--sh-soft);transition:all .3s var(--ease);backdrop-filter:blur(6px)}
-    .ls-unlock-btn:hover{background:#fff;border-color:var(--burgundy);transform:scale(1.03)}
+    .ls-unlock-btn{
+      background:rgba(255,255,255,.90);
+      border:1.5px dashed var(--rose);
+      color:var(--burg);font-family:var(--fb);
+      font-size:.86rem;font-weight:700;
+      padding:9px 20px;border-radius:var(--rf);
+      cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+      box-shadow:var(--sh);transition:all .3s var(--ease);
+      backdrop-filter:blur(8px);
+    }
+    .ls-unlock-btn:hover{background:#fff;border-color:var(--burg);transform:scale(1.03)}
 
     /* ============================================================
        МОДАЛКА ПАРОЛЯ
     ============================================================ */
-    #secret-modal{position:fixed;inset:0;background:rgba(18,4,10,.82);backdrop-filter:blur(14px);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+    #secret-modal{
+      position:fixed;inset:0;background:rgba(18,4,10,.83);
+      backdrop-filter:blur(14px);z-index:999999;
+      display:flex;align-items:center;justify-content:center;padding:20px;
+      opacity:0;pointer-events:none;transition:opacity .3s;
+    }
     #secret-modal.active{opacity:1;pointer-events:auto}
-    .modal-card{background:#fff;border-radius:var(--r-md);padding:32px 24px 24px;max-width:380px;width:100%;text-align:center;box-shadow:0 28px 60px rgba(0,0,0,.44);border:2px solid var(--gold);transform:scale(.9);transition:transform .3s var(--ease)}
+    .modal-card{
+      background:#fff;border-radius:var(--rmd);padding:34px 26px 26px;
+      max-width:390px;width:100%;text-align:center;
+      box-shadow:0 28px 65px rgba(0,0,0,.46);border:2px solid var(--gold);
+      transform:scale(.9);transition:transform .32s var(--ease);
+    }
     #secret-modal.active .modal-card{transform:scale(1)}
-    .modal-icon{font-size:2.3rem;display:block;margin-bottom:9px}
-    .modal-title{font-family:var(--fd);font-size:1.38rem;color:var(--burgundy);margin-bottom:5px}
-    .modal-desc{font-size:.87rem;color:var(--muted);margin-bottom:16px;line-height:1.44}
-    .modal-input{width:100%;padding:12px 13px;border:2px solid var(--roselit);border-radius:var(--r-sm);font-size:1.1rem;font-family:var(--fb);text-align:center;outline:none;margin-bottom:11px;transition:border-color .2s}
-    .modal-input:focus{border-color:var(--burgundy);box-shadow:0 0 11px rgba(92,26,46,.2)}
-    #pass-error{color:#c0392b;font-size:.81rem;margin:-6px 0 9px;display:none}
-    .modal-submit{width:100%;background:linear-gradient(135deg,var(--burgundy),#7e243e);color:#fff;border:none;padding:12px 16px;border-radius:var(--rf);font-size:.97rem;font-weight:700;cursor:pointer;margin-bottom:9px;box-shadow:0 7px 16px rgba(92,26,46,.28);transition:transform .22s}
+    .modal-icon{font-size:2.4rem;display:block;margin-bottom:9px}
+    .modal-title{font-family:var(--fd);font-size:1.4rem;color:var(--burg);margin-bottom:5px}
+    .modal-desc{font-size:.88rem;color:var(--muted);margin-bottom:17px;line-height:1.45}
+    .modal-input{
+      width:100%;padding:12px 14px;border:2px solid var(--rosel);
+      border-radius:var(--rsm);font-size:1.1rem;font-family:var(--fb);
+      text-align:center;outline:none;margin-bottom:11px;transition:border-color .2s;
+    }
+    .modal-input:focus{border-color:var(--burg);box-shadow:0 0 12px rgba(92,26,46,.2)}
+    #pass-error{color:#c0392b;font-size:.82rem;margin:-6px 0 9px;display:none}
+    .modal-submit{
+      width:100%;background:linear-gradient(135deg,var(--burg),#7e243e);color:#fff;
+      border:none;padding:12px 16px;border-radius:var(--rf);
+      font-size:.97rem;font-weight:700;cursor:pointer;margin-bottom:9px;
+      box-shadow:0 7px 16px rgba(92,26,46,.28);transition:transform .22s;
+    }
     .modal-submit:hover{transform:translateY(-2px)}
-    .modal-cancel{background:transparent;border:none;color:var(--muted);font-size:.87rem;cursor:pointer}
-    .modal-cancel:hover{color:var(--burgundy)}
+    .modal-cancel{background:transparent;border:none;color:var(--muted);font-size:.88rem;cursor:pointer}
+    .modal-cancel:hover{color:var(--burg)}
 
     /* ============================================================
        КНОПКА «НАЗАД К ТАЙМЕРУ»
     ============================================================ */
-    #back-btn {
-      position: fixed; top: 18px; left: 18px; z-index: 8000;
-      display: none; /* показываем при разблокировке */
-      align-items: center; gap: 7px;
-      background: rgba(255,255,255,.92);
-      border: 1.5px solid var(--roselit);
-      color: var(--burgundy);
-      font-family: var(--fb); font-size: .85rem; font-weight: 700;
-      padding: 8px 16px; border-radius: var(--rf);
-      cursor: pointer;
-      box-shadow: var(--sh-soft);
-      backdrop-filter: blur(8px);
-      transition: all .3s var(--ease);
+    #back-btn{
+      position:fixed;top:18px;left:18px;z-index:8000;
+      display:none;align-items:center;gap:7px;
+      background:rgba(255,255,255,.92);
+      border:1.5px solid var(--rosel);color:var(--burg);
+      font-family:var(--fb);font-size:.84rem;font-weight:700;
+      padding:8px 15px;border-radius:var(--rf);cursor:pointer;
+      box-shadow:var(--sh);backdrop-filter:blur(8px);
+      transition:all .3s var(--ease);
     }
-    #back-btn:hover{background:#fff;border-color:var(--burgundy);transform:scale(1.04)}
+    #back-btn:hover{background:#fff;border-color:var(--burg);transform:scale(1.04)}
     #back-btn.show{display:flex}
 
     /* ============================================================
@@ -179,61 +218,60 @@
 
     /* HERO */
     .hero-section{min-height:92vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:70px 15px 48px;position:relative}
-    .hero-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 20px;background:rgba(255,255,255,.85);border:1px solid var(--roselit);border-radius:var(--rf);font-size:.87rem;font-weight:600;color:var(--burgundy);margin-bottom:20px;letter-spacing:.05em;text-transform:uppercase;box-shadow:var(--sh-soft)}
-    @keyframes hb{0%,70%,100%{transform:scale(1)} 14%{transform:scale(1.2)} 42%{transform:scale(1.12)}}
+    .hero-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 20px;background:rgba(255,255,255,.84);border:1px solid var(--rosel);border-radius:var(--rf);font-size:.87rem;font-weight:600;color:var(--burg);margin-bottom:20px;letter-spacing:.05em;text-transform:uppercase;box-shadow:var(--sh)}
+    @keyframes hb{0%,70%,100%{transform:scale(1)}14%{transform:scale(1.2)}42%{transform:scale(1.12)}}
     .hb{display:inline-block;animation:hb 2.2s infinite}
-    @keyframes fa{0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}}
+    @keyframes fa{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
     .hero-aura{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:280px;height:280px;background:radial-gradient(circle,rgba(216,140,154,.28),rgba(201,168,106,.1) 50%,transparent 70%);border-radius:50%;filter:blur(32px);z-index:-1;pointer-events:none;animation:fa 6s ease-in-out alternate infinite}
-    .hero-title{font-size:clamp(2.2rem,7vw,4.4rem);color:var(--burgundy);letter-spacing:-.02em;margin-bottom:10px}
-    .hero-title .hl{background:linear-gradient(135deg,var(--burgundy),#8c2643,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero-title{font-size:clamp(2.2rem,7vw,4.4rem);color:var(--burg);letter-spacing:-.02em;margin-bottom:10px}
+    .hero-title .hl{background:linear-gradient(135deg,var(--burg),#8c2643,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
     .hero-age{font-family:var(--fs);font-size:clamp(1.2rem,3vw,1.85rem);font-style:italic;color:var(--gold);margin-bottom:13px;font-weight:600}
     .hero-sub{max-width:565px;font-size:clamp(.96rem,2.2vw,1.12rem);color:var(--muted);margin:0 auto 28px}
-    .hero-cta{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--burgundy),#7e243e);color:var(--cream);font-weight:600;font-size:.98rem;padding:12px 28px;border-radius:var(--rf);text-decoration:none;box-shadow:0 8px 20px rgba(92,26,46,.27);transition:all .3s var(--ease)}
+    .hero-cta{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--burg),#7e243e);color:var(--cream);font-weight:600;font-size:.98rem;padding:12px 28px;border-radius:var(--rf);text-decoration:none;box-shadow:0 8px 20px rgba(92,26,46,.27);transition:all .3s var(--ease)}
     .hero-cta:hover{transform:translateY(-3px) scale(1.02)}
     @keyframes wa{0%{transform:translateY(0);opacity:1}100%{transform:translateY(11px);opacity:0}}
     .scroll-hint{margin-top:42px;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--rose);font-size:.77rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none}
     .scroll-mouse{width:19px;height:31px;border:2px solid var(--rose);border-radius:10px;display:flex;justify-content:center;padding-top:5px}
-    .scroll-wheel{width:3px;height:6px;background:var(--burgundy);border-radius:2px;animation:wa 1.6s infinite}
+    .scroll-wheel{width:3px;height:6px;background:var(--burg);border-radius:2px;animation:wa 1.6s infinite}
 
     /* ПИСЬМО */
     .section-wrap{margin-bottom:88px}
     .section-hd{text-align:center;margin-bottom:36px}
     .stag{display:inline-block;font-family:var(--fsc);font-size:1.42rem;color:var(--gold);margin-bottom:4px}
-    .stitle{font-size:clamp(1.72rem,4vw,2.65rem);color:var(--burgundy)}
-    .letter-card{background:rgba(255,248,243,.94);border-radius:var(--r-lg);padding:clamp(24px,5vw,54px);box-shadow:var(--sh-ro);border:1px solid rgba(216,140,154,.3);position:relative;max-width:810px;margin:0 auto;backdrop-filter:blur(12px)}
+    .stitle{font-size:clamp(1.72rem,4vw,2.65rem);color:var(--burg)}
+    .letter-card{background:rgba(255,248,243,.94);border-radius:var(--rlg);padding:clamp(24px,5vw,54px);box-shadow:var(--shr);border:1px solid rgba(216,140,154,.3);position:relative;max-width:810px;margin:0 auto;backdrop-filter:blur(12px)}
     .wax-seal{position:absolute;top:-20px;right:40px;width:47px;height:47px;background:radial-gradient(circle,#8c2643,var(--deep));border-radius:50%;box-shadow:0 4px 12px rgba(92,26,46,.34);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:1.22rem;border:2px solid var(--gold)}
     .letter-body{font-family:var(--fs);font-size:clamp(1.07rem,2.2vw,1.26rem);line-height:1.85;color:var(--dark)}
-    .letter-salut{font-family:var(--fd);font-size:clamp(1.4rem,2.7vw,1.87rem);color:var(--burgundy);margin-bottom:18px;font-weight:700}
-    .drop-cap{float:left;font-family:var(--fd);font-size:3.3rem;line-height:.8;padding:4px 9px 0 0;color:var(--burgundy);font-weight:700}
+    .letter-salut{font-family:var(--fd);font-size:clamp(1.4rem,2.7vw,1.87rem);color:var(--burg);margin-bottom:18px;font-weight:700}
+    .drop-cap{float:left;font-family:var(--fd);font-size:3.3rem;line-height:.8;padding:4px 9px 0 0;color:var(--burg);font-weight:700}
     .lp{margin-bottom:17px;text-align:justify}
     .lhl{background:linear-gradient(120deg,rgba(247,225,229,.8),rgba(235,181,191,.4));padding:2px 5px;border-radius:4px;font-weight:600;color:#431221}
-    .lps{margin-top:26px;padding-top:17px;border-top:1px dashed var(--rose);font-family:var(--fsc);font-size:1.48rem;color:var(--burgundy)}
+    .lps{margin-top:26px;padding-top:17px;border-top:1px dashed var(--rose);font-family:var(--fsc);font-size:1.48rem;color:var(--burg)}
 
     /* ГАЛЕРЕЯ */
-    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:24px 17px;max-width:920px;margin:0 auto;padding:8px}
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:24px 17px;max-width:920px;margin:0 auto;padding:8px}
     .polaroid{background:#fff;padding:11px 11px 20px;border-radius:3px;box-shadow:0 9px 21px rgba(92,26,46,.1),0 2px 4px rgba(0,0,0,.04);cursor:pointer;position:relative;transition:transform .4s var(--ease),box-shadow .4s}
     .ptape{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:68px;height:20px;background:rgba(255,248,235,.84);border:1px dashed rgba(201,168,106,.34);z-index:2}
-    .polaroid:nth-child(1){transform:rotate(-2.4deg)}.polaroid:nth-child(2){transform:rotate(1.7deg)}.polaroid:nth-child(3){transform:rotate(-1.4deg)}
-    .polaroid:nth-child(4){transform:rotate(2.1deg)}.polaroid:nth-child(5){transform:rotate(-1.9deg)}.polaroid:nth-child(6){transform:rotate(1.3deg)}
+    .polaroid:nth-child(1){transform:rotate(-2.4deg)}.polaroid:nth-child(2){transform:rotate(1.7deg)}.polaroid:nth-child(3){transform:rotate(-1.4deg)}.polaroid:nth-child(4){transform:rotate(2.1deg)}.polaroid:nth-child(5){transform:rotate(-1.9deg)}.polaroid:nth-child(6){transform:rotate(1.3deg)}
     .polaroid:hover{transform:rotate(0) scale(1.04) translateY(-7px)!important;z-index:10;box-shadow:0 17px 34px rgba(92,26,46,.19)}
     .pimgw{width:100%;aspect-ratio:1;overflow:hidden;border-radius:2px;background:var(--blush)}
     .pimg{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
     .polaroid:hover .pimg{transform:scale(1.05)}
-    .pcap{font-family:var(--fsc);font-size:1.28rem;color:var(--burgundy);text-align:center;margin-top:10px}
+    .pcap{font-family:var(--fsc);font-size:1.28rem;color:var(--burg);text-align:center;margin-top:10px}
 
     /* LIGHTBOX */
     #lightbox{position:fixed;inset:0;background:rgba(18,4,10,.88);backdrop-filter:blur(12px);z-index:999999;display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}
     #lightbox.active{opacity:1;pointer-events:auto}
-    .lb-content{max-width:88vw;max-height:84vh;background:#fff;padding:12px 12px 23px;border-radius:5px;box-shadow:0 22px 50px rgba(0,0,0,.45);transform:scale(.9);transition:transform .33s var(--ease);display:flex;flex-direction:column;align-items:center}
+    .lb-content{max-width:88vw;max-height:84vh;background:#fff;padding:12px 12px 23px;border-radius:5px;box-shadow:0 22px 50px rgba(0,0,0,.44);transform:scale(.9);transition:transform .33s var(--ease);display:flex;flex-direction:column;align-items:center}
     #lightbox.active .lb-content{transform:scale(1)}
     .lb-img{max-width:100%;max-height:63vh;object-fit:contain;border-radius:3px}
-    .lb-cap{font-family:var(--fsc);font-size:1.55rem;color:var(--burgundy);margin-top:10px}
+    .lb-cap{font-family:var(--fsc);font-size:1.55rem;color:var(--burg);margin-top:10px}
     .lb-close{position:absolute;top:17px;right:21px;width:40px;height:40px;background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.34);color:#fff;font-size:1.32rem;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .23s}
-    .lb-close:hover{background:var(--burgundy);transform:rotate(90deg)}
+    .lb-close:hover{background:var(--burg);transform:rotate(90deg)}
 
     /* ТОРТ */
-    .cake-section{background:linear-gradient(180deg,rgba(247,225,229,.35),rgba(255,248,243,.78));border-radius:var(--r-lg);padding:clamp(30px,6vw,66px) 18px;border:1px solid rgba(201,168,106,.24);box-shadow:var(--sh-ro);text-align:center;position:relative;overflow:hidden;backdrop-filter:blur(8px)}
-    .cake-instr{font-size:1.04rem;color:var(--burgundy);font-weight:600;margin-bottom:20px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.85);padding:8px 19px;border-radius:var(--rf);box-shadow:var(--sh-soft);border:1px solid rgba(216,140,154,.24)}
+    .cake-section{background:linear-gradient(180deg,rgba(247,225,229,.35),rgba(255,248,243,.78));border-radius:var(--rlg);padding:clamp(30px,6vw,66px) 18px;border:1px solid rgba(201,168,106,.24);box-shadow:var(--shr);text-align:center;position:relative;overflow:hidden;backdrop-filter:blur(8px)}
+    .cake-instr{font-size:1.04rem;color:var(--burg);font-weight:600;margin-bottom:20px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.85);padding:8px 19px;border-radius:var(--rf);box-shadow:var(--sh);border:1px solid rgba(216,140,154,.24)}
     .cake-stage{position:relative;width:280px;height:280px;margin:0 auto 22px;cursor:pointer;user-select:none}
     .cake-svg{width:100%;height:100%;filter:drop-shadow(0 10px 18px rgba(92,26,46,.14));transition:transform .25s}
     .cake-stage:hover .cake-svg{transform:scale(1.03)}
@@ -241,29 +279,37 @@
     .fl2{animation-delay:.3s;animation-duration:2.1s}.fl3{animation-delay:.6s;animation-duration:1.6s}
     @keyframes flicker{0%{transform:scale(1) rotate(-1deg);filter:drop-shadow(0 0 5px #ffa500)}35%{transform:scale(1.08,.94) rotate(2deg);filter:drop-shadow(0 0 9px #ffd700)}100%{transform:scale(1.04,.98) rotate(1deg);filter:drop-shadow(0 0 11px #ffd700)}}
     .blown .cf{opacity:0!important;transform:scale(.15) translateY(-7px)!important}
-    .wish-box{max-height:0;opacity:0;overflow:hidden;transition:max-height .7s var(--ease),opacity .7s,padding .7s;background:#fff;border-radius:var(--r-md);max-width:630px;margin:0 auto;border:1px solid var(--gold);box-shadow:0 10px 26px rgba(201,168,106,.24);padding:0 23px}
+    .wish-box{max-height:0;opacity:0;overflow:hidden;transition:max-height .7s var(--ease),opacity .7s,padding .7s;background:#fff;border-radius:var(--rmd);max-width:630px;margin:0 auto;border:1px solid var(--gold);box-shadow:0 10px 26px rgba(201,168,106,.24);padding:0 23px}
     .wish-box.revealed{max-height:460px;opacity:1;padding:24px 23px;margin-top:17px}
-    .wish-title{font-family:var(--fd);color:var(--burgundy);font-size:1.56rem;margin-bottom:8px}
+    .wish-title{font-family:var(--fd);color:var(--burg);font-size:1.56rem;margin-bottom:8px}
     .wish-text{font-size:1.04rem;color:var(--dark);margin-bottom:15px;line-height:1.62}
-    .relight-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--rose);color:var(--burgundy);font-weight:600;font-size:.87rem;padding:6px 15px;border-radius:var(--rf);cursor:pointer;transition:all .22s}
-    .relight-btn:hover{background:var(--blush);border-color:var(--burgundy)}
+    .relight-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--rose);color:var(--burg);font-weight:600;font-size:.87rem;padding:6px 15px;border-radius:var(--rf);cursor:pointer;transition:all .22s}
+    .relight-btn:hover{background:var(--blush);border-color:var(--burg)}
 
     /* ФИНАЛ */
     .closing-section{text-align:center;padding:50px 18px 36px}
     .c-divider{width:108px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 28px}
-    .c-quote{font-family:var(--fs);font-size:clamp(1.22rem,2.7vw,1.82rem);font-style:italic;color:var(--burgundy);max-width:640px;margin:0 auto 20px;line-height:1.5}
+    .c-quote{font-family:var(--fs);font-size:clamp(1.22rem,2.7vw,1.82rem);font-style:italic;color:var(--burg);max-width:640px;margin:0 auto 20px;line-height:1.5}
     .sig-lbl{font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
-    .sig-name{font-family:var(--fsc);font-size:clamp(1.9rem,4.5vw,2.9rem);color:var(--burgundy);display:inline-block;transform:rotate(-3deg)}
-    .kiss-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.88);border:1px solid var(--rose);color:var(--burgundy);font-weight:600;font-size:.97rem;padding:12px 27px;border-radius:var(--rf);box-shadow:var(--sh-soft);cursor:pointer;margin-top:32px;transition:all .3s var(--ease)}
-    .kiss-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:var(--sh-ro);border-color:var(--burgundy);background:#fff}
+    .sig-name{font-family:var(--fsc);font-size:clamp(1.9rem,4.5vw,2.9rem);color:var(--burg);display:inline-block;transform:rotate(-3deg)}
+    .kiss-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.88);border:1px solid var(--rose);color:var(--burg);font-weight:600;font-size:.97rem;padding:12px 27px;border-radius:var(--rf);box-shadow:var(--sh);cursor:pointer;margin-top:32px;transition:all .3s var(--ease)}
+    .kiss-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:var(--shr);border-color:var(--burg);background:#fff}
 
     /* ПЛЕЕР */
-    #player-widget{position:fixed;bottom:20px;right:20px;z-index:10000;background:rgba(255,248,243,.94);backdrop-filter:blur(13px);border:1px solid rgba(216,140,154,.34);border-radius:var(--rf);box-shadow:0 9px 25px rgba(92,26,46,.17);padding:6px 14px 6px 6px;display:flex;align-items:center;gap:8px;max-width:295px;cursor:pointer;transition:all .3s var(--ease)}
-    #player-widget:hover{transform:translateY(-3px);border-color:var(--burgundy)}
-    .pw-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--burgundy),#7e243e);border:none;color:#fff;font-size:.93rem;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 9px rgba(92,26,46,.24);flex-shrink:0;transition:transform .18s}
+    #player-widget{
+      position:fixed;bottom:20px;right:20px;z-index:10000;
+      background:rgba(255,248,243,.94);backdrop-filter:blur(13px);
+      border:1px solid rgba(216,140,154,.34);border-radius:var(--rf);
+      box-shadow:0 9px 25px rgba(92,26,46,.17);
+      padding:6px 14px 6px 6px;
+      display:flex;align-items:center;gap:8px;max-width:295px;
+      cursor:pointer;transition:all .3s var(--ease);
+    }
+    #player-widget:hover{transform:translateY(-3px);border-color:var(--burg)}
+    .pw-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--burg),#7e243e);border:none;color:#fff;font-size:.93rem;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 9px rgba(92,26,46,.24);flex-shrink:0;transition:transform .18s}
     .pw-btn:hover{transform:scale(1.09)}
     .pw-info{display:flex;flex-direction:column;overflow:hidden}
-    .pw-title{font-size:.81rem;font-weight:700;color:var(--burgundy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pw-title{font-size:.81rem;font-weight:700;color:var(--burg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .pw-artist{font-size:.69rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .pw-eq{display:flex;align-items:flex-end;gap:2.5px;height:16px;flex-shrink:0}
     .eq-b{width:3px;height:4px;background:var(--rose);border-radius:2px}
@@ -273,15 +319,14 @@
     #player-widget.playing .eq-b:nth-child(3){animation-delay:.2s}
     #player-widget.playing .eq-b:nth-child(4){animation-delay:.5s}
     @keyframes eq{0%{height:4px}50%{height:16px}100%{height:5px}}
-    #yt-container{position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
 
     @media(max-width:700px){
-      #back-btn{top:12px;left:12px;font-size:.78rem;padding:7px 13px}
+      #back-btn{top:12px;left:12px;font-size:.77rem;padding:7px 12px}
       #player-widget{bottom:12px;right:12px;left:12px;max-width:none;justify-content:space-between}
     }
   </style>
 
-  <!-- ▼ КРИТИЧНЫЕ ГЛОБАЛЬНЫЕ ФУНКЦИИ — в head, до рендера HTML ▼ -->
+  <!-- ── ГЛОБАЛЬНЫЕ ФУНКЦИИ (объявляются ДО рендера HTML) ── -->
   <script>
     var TARGET_DATE = new Date('2026-09-19T00:00:00');
 
@@ -321,19 +366,25 @@
       var bb=document.getElementById('back-btn');
       var bg=document.getElementById('bg-tree-canvas');
 
-      if(ls){ if(anim) ls.classList.add('unlocking'); setTimeout(function(){ ls.style.display='none'; }, anim?860:0); }
-
-      if(mc){ mc.classList.add('visible'); startScrollReveal(); }
+      if(ls){
+        if(anim) ls.classList.add('unlocking');
+        setTimeout(function(){ ls.style.display='none'; }, anim ? 860 : 0);
+      }
+      if(mc){ mc.classList.add('visible'); if(window._startReveal) window._startReveal(); }
       if(bb){ bb.classList.add('show'); }
 
-      // Показать фоновое дерево поздравления
+      // Запустить/показать фоновое дерево поздравления
       if(bg){
         bg.style.display='block';
-        setTimeout(function(){ bg.classList.add('visible'); }, 50);
-        if(window.bgTree) window.bgTree.startIfNeeded();
+        setTimeout(function(){ bg.classList.add('visible'); }, 80);
+        if(window._bgTree) window._bgTree.startIfNeeded();
+        else if(window._initBgTree) window._initBgTree();
       }
 
-      if(anim){ try{ launchConfetti(); }catch(e){} try{ sparkleSound(); }catch(e){} }
+      if(anim){
+        try{ launchConfetti(); }catch(e){}
+        try{ sparkleSound(); }catch(e){}
+      }
     }
 
     function goBackToTimer(){
@@ -344,68 +395,54 @@
 
       if(mc){ mc.classList.remove('visible'); mc.style.display='none'; }
       if(bb){ bb.classList.remove('show'); }
-      if(bg){ bg.classList.remove('visible'); setTimeout(function(){ bg.style.display='none'; }, 1000); }
-
-      if(ls){
-        ls.classList.remove('unlocking');
-        ls.style.display='flex';
-        ls.style.opacity='1';
-        ls.style.transform='none';
-      }
+      if(bg){ bg.classList.remove('visible'); setTimeout(function(){ bg.style.display='none'; },1000); }
+      if(ls){ ls.classList.remove('unlocking'); ls.style.display='flex'; ls.style.opacity='1'; ls.style.transform='none'; }
     }
   </script>
 </head>
 <body>
 
+  <!-- АУДИО — файл music.mp3 в папке проекта -->
+  <audio id="bg-audio" src="music.mp3" loop preload="auto"></audio>
+
+  <!-- Фоновые лепестки -->
   <canvas id="petals-canvas"></canvas>
 
-  <!-- Фоновое дерево поздравления (показывается после разблокировки) -->
+  <!-- Фоновое дерево поздравления -->
   <canvas id="bg-tree-canvas"></canvas>
-
-  <div id="yt-container"><div id="yt-player"></div></div>
 
   <!-- ПЛЕЕР -->
   <div id="player-widget" title="Музыка">
-    <button class="pw-btn" id="pw-btn" aria-label="Воспроизвести"><span id="pw-icon">▶</span></button>
+    <button class="pw-btn" id="pw-btn" aria-label="Воспроизвести / Пауза"><span id="pw-icon">▶</span></button>
     <div class="pw-info"><span class="pw-title">Так красиво</span><span class="pw-artist">Сергей Лазарев</span></div>
     <div class="pw-eq"><div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div></div>
   </div>
 
-  <!-- КНОПКА НАЗАД К ТАЙМЕРУ -->
+  <!-- КНОПКА НАЗАД -->
   <button id="back-btn" onclick="goBackToTimer()">← К таймеру</button>
 
   <!-- ============================================================
-       ЭКРАН ВХОДА
-  ============================================================ -->
-  <div id="enter-screen">
-    <div class="enter-hw">
-      <div class="enter-ring"></div><div class="enter-ring"></div><div class="enter-ring"></div>
-      <div class="enter-he">💖</div>
-    </div>
-    <h1 class="enter-title">Для тебя, Ирочка ✨</h1>
-    <p class="enter-sub">Твой особенный подарок уже ждёт. Нажми, чтобы открыть...</p>
-    <button class="enter-btn" id="enter-btn">Открыть подарок ❤️</button>
-    <div class="enter-note">🎵 Включится романтическая музыка</div>
-  </div>
-
-  <!-- ============================================================
-       LOCKED SCREEN — дерево во весь фон + таймер
+       LOCKED SCREEN — показывается сразу
   ============================================================ -->
   <div id="locked-screen">
 
-    <!-- Дерево: абсолютный canvas на весь экран -->
+    <!-- Дерево на весь фон -->
     <canvas id="locked-tree-canvas"></canvas>
 
-    <div class="ls-header">
+    <div class="ls-top">
       <div class="ls-badge">✨ Секретный сюрприз для Иры ✨</div>
       <h1 class="ls-title">Шкатулка воспоминаний</h1>
       <p class="ls-sub">
-        Моя любимая Ирочка! Этот сюрприз откроется ровно<br>
-        в твой 21-й день рождения — <strong>19 сентября 2026 ✨</strong>
+        Моя любимая Ирочка! Этот сюрприз откроется ровно в твой<br>
+        21-й день рождения — <strong>19 сентября 2026 в полночь ✨</strong>
       </p>
+      <div class="music-hint">
+        <span class="music-note">🎵</span>
+        Нажмите в любом месте экрана, чтобы включить музыку
+      </div>
     </div>
 
-    <div class="ls-footer">
+    <div class="ls-bottom">
       <div class="cd-grid">
         <div class="cd-card"><span class="cd-val" id="cd-d">23</span><span class="cd-lbl">Дней</span></div>
         <div class="cd-card"><span class="cd-val" id="cd-h">00</span><span class="cd-lbl">Часов</span></div>
@@ -416,7 +453,7 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА ПАРОЛЯ -->
+  <!-- МОДАЛКА -->
   <div id="secret-modal">
     <div class="modal-card">
       <span class="modal-icon">🔐</span>
@@ -525,7 +562,7 @@
       <div class="reveal" style="margin-bottom:5px"><div class="sig-lbl">Навсегда твой,</div><div class="sig-name">Любящий муж ❤️</div></div>
       <div class="reveal"><button class="kiss-btn" id="kiss-btn">Послать поцелуй 💋</button></div>
     </footer>
-  </div>
+  </div><!-- /main-content -->
 
   <!-- LIGHTBOX -->
   <div id="lightbox">
@@ -534,147 +571,158 @@
   </div>
 
   <script>
-    // ── YOUTUBE ────────────────────────────────────────────────────
-    var ytPlayer=null, ytReady=false, ytPlaying=false;
-    (function(){ var s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api'; document.head.appendChild(s); })();
-    window.onYouTubeIframeAPIReady=function(){
-      try{
-        ytPlayer=new YT.Player('yt-player',{
-          height:'1',width:'1',videoId:'kY1-Q06J66g',
-          playerVars:{autoplay:0,controls:0,rel:0,playsinline:1,enablejsapi:1},
-          events:{
-            onReady:function(){ ytReady=true; },
-            onStateChange:function(e){
-              var pw=document.getElementById('player-widget'), pi=document.getElementById('pw-icon');
-              if(e.data===1){ ytPlaying=true; if(pi) pi.textContent='❚❚'; if(pw) pw.classList.add('playing'); }
-              else{ ytPlaying=false; if(pi) pi.textContent='▶'; if(pw) pw.classList.remove('playing'); }
-            }
-          }
-        });
-      }catch(ex){}
-    };
+    // ──────────────────────────────────────────────
+    //  АУДИО — локальный файл music.mp3
+    // ──────────────────────────────────────────────
+    var audio = document.getElementById('bg-audio');
+    var audioPlaying = false;
+
+    function updatePlayerUI(){
+      var pw = document.getElementById('player-widget');
+      var pi = document.getElementById('pw-icon');
+      if(audioPlaying){
+        if(pi) pi.textContent = '❚❚';
+        if(pw) pw.classList.add('playing');
+      } else {
+        if(pi) pi.textContent = '▶';
+        if(pw) pw.classList.remove('playing');
+      }
+    }
+
     function startMusic(){
-      if(ytPlayer&&ytReady){ try{ ytPlayer.playVideo(); }catch(e){} }
-      else { setTimeout(startMusic,900); }
+      if(!audio) return;
+      var p = audio.play();
+      if(p && p.then){
+        p.then(function(){
+          audioPlaying = true;
+          updatePlayerUI();
+          // Скрыть подсказку после включения
+          var hint = document.querySelector('.music-hint');
+          if(hint){ hint.style.transition='opacity .6s'; hint.style.opacity='0'; setTimeout(function(){ hint.style.display='none'; },700); }
+        }).catch(function(){
+          // Браузер заблокировал — ждём жеста
+        });
+      }
     }
-    function toggleMusic(){ if(!ytPlayer||!ytReady) return; if(ytPlaying) try{ytPlayer.pauseVideo();}catch(e){} else startMusic(); }
-    var pwBtn=document.getElementById('pw-btn'), pwW=document.getElementById('player-widget');
-    if(pwBtn) pwBtn.addEventListener('click',function(e){ e.stopPropagation(); toggleMusic(); });
-    if(pwW) pwW.addEventListener('click',function(){ toggleMusic(); });
 
-    // ── ЭКРАН ВХОДА ────────────────────────────────────────────────
-    var entered=false;
-    function doEnter(){
-      if(entered) return; entered=true;
+    function toggleMusic(){
+      if(!audio) return;
+      if(audioPlaying){ audio.pause(); audioPlaying=false; updatePlayerUI(); }
+      else { startMusic(); }
+    }
+
+    // Первый жест запускает музыку автоматически
+    function onFirstGesture(){
       startMusic();
-      var es=document.getElementById('enter-screen');
-      var ls=document.getElementById('locked-screen');
-      if(es) es.classList.add('leaving');
-      setTimeout(function(){
-        if(es) es.style.display='none';
-        if(ls){ ls.style.display='flex'; }
-        // Инициализировать дерево ПОСЛЕ того как locked-screen виден
-        setTimeout(initLockedTree, 80);
-        startCountdown();
-        if(SafeStorage.get('ira_ok')==='yes'||new Date()>=TARGET_DATE) unlockWebsite(false);
-      }, 900);
+      document.removeEventListener('click', onFirstGesture, true);
+      document.removeEventListener('touchstart', onFirstGesture, true);
     }
-    var enterBtn=document.getElementById('enter-btn');
-    var enterScreen=document.getElementById('enter-screen');
-    if(enterBtn) enterBtn.addEventListener('click',doEnter);
-    if(enterScreen) enterScreen.addEventListener('click',doEnter);
+    // capture:true — срабатывает даже если дочерние элементы вызывают stopPropagation
+    document.addEventListener('click', onFirstGesture, { capture: true, once: true });
+    document.addEventListener('touchstart', onFirstGesture, { capture: true, once: true, passive: true });
 
-    // ── ТАЙМЕР ─────────────────────────────────────────────────────
-    var cdi=null;
-    function startCountdown(){ updateCountdown(); cdi=setInterval(updateCountdown,1000); }
+    // Кнопка плеера
+    var pwBtn = document.getElementById('pw-btn');
+    var pwWidget = document.getElementById('player-widget');
+    if(pwBtn) pwBtn.addEventListener('click', function(e){ e.stopPropagation(); toggleMusic(); });
+    if(pwWidget) pwWidget.addEventListener('click', function(e){ e.stopPropagation(); toggleMusic(); });
+
+    // ──────────────────────────────────────────────
+    //  ТАЙМЕР
+    // ──────────────────────────────────────────────
+    var cdi = null;
     function updateCountdown(){
-      var diff=TARGET_DATE-new Date();
-      if(diff<=0){
+      var diff = TARGET_DATE - new Date();
+      if(diff <= 0){
         ['cd-d','cd-h','cd-m','cd-s'].forEach(function(id){ var e=document.getElementById(id); if(e) e.textContent='00'; });
         clearInterval(cdi); unlockWebsite(true); return;
       }
-      function pad(n){ return String(n).padStart(2,'0'); }
-      var dEl=document.getElementById('cd-d'); if(dEl) dEl.textContent=pad(Math.floor(diff/86400000));
-      var hEl=document.getElementById('cd-h'); if(hEl) hEl.textContent=pad(Math.floor(diff%86400000/3600000));
-      var mEl=document.getElementById('cd-m'); if(mEl) mEl.textContent=pad(Math.floor(diff%3600000/60000));
-      var sEl=document.getElementById('cd-s'); if(sEl) sEl.textContent=pad(Math.floor(diff%60000/1000));
+      function pad(n){ return String(Math.floor(n)).padStart(2,'0'); }
+      var d=document.getElementById('cd-d'); if(d) d.textContent=pad(diff/86400000);
+      var h=document.getElementById('cd-h'); if(h) h.textContent=pad(diff%86400000/3600000);
+      var m=document.getElementById('cd-m'); if(m) m.textContent=pad(diff%3600000/60000);
+      var s=document.getElementById('cd-s'); if(s) s.textContent=pad(diff%60000/1000);
     }
+    updateCountdown();
+    cdi = setInterval(updateCountdown, 1000);
 
-    // ──────────────────────────────────────────────────────────────
-    //  ДВИЖОК ДЕРЕВА — универсальный
-    //  mode: 'locked'  — полный фон locked-screen, высокая насыщенность
-    //  mode: 'bg'      — фиксированный фон поздравления, больше ветвей, нежнее
-    // ──────────────────────────────────────────────────────────────
-    var PAL=['#5C1A2E','#8C2643','#D88C9A','#EBB5BF','#F7E1E5','#C9A86A','#FF4D6D','#FF758F'];
+    // ──────────────────────────────────────────────
+    //  ДВИЖОК ДЕРЕВА
+    //  mode: 'locked' — дерево на фоне таймера
+    //  mode: 'bg'     — дерево-фон поздравления
+    // ──────────────────────────────────────────────
+    var PAL = ['#5C1A2E','#8C2643','#C45070','#D88C9A','#EBB5BF','#F7E1E5','#C9A86A','#FF4D6D'];
 
     function HeartTree(canvasId, mode){
-      var canvas=document.getElementById(canvasId);
+      var canvas  = document.getElementById(canvasId);
       if(!canvas) return;
-      var ctx=canvas.getContext('2d');
-      var W=0,H=0,branches=[],leaves=[],fallers=[],t=0,progress=0,running=false;
+      var ctx     = canvas.getContext('2d');
+      var W=0, H=0, branches=[], leaves=[], fallers=[];
+      var t=0, progress=0, running=false;
 
-      // Настройки по режиму
-      var trunkScale = mode==='bg' ? 0.38 : 0.32;   // bg — выше ствол
-      var maxDepth   = mode==='bg' ? 7   : 6;        // bg — больше ветвей
-      var leafCount  = mode==='bg' ? [5,9] : [4,8];  // bg — больше листьев
-      var growSpeed  = mode==='bg' ? 0.004 : 0.005;  // bg — медленнее, торжественнее
-      var fallerRate = mode==='bg' ? 0.22 : 0.30;    // частота падающих сердец
-      var strokeColor= mode==='bg' ? '#6b2038' : '#431221';
+      var cfg = mode === 'locked'
+        ? { trunkH:.38, maxD:7, lMin:5, lMax:10, speed:.0045, fallRate:.28, strokeAlpha:.9  }
+        : { trunkH:.40, maxD:8, lMin:6, lMax:12, speed:.0030, fallRate:.18, strokeAlpha:.75 };
 
       function measure(){
         if(mode==='locked'){
           var ls=document.getElementById('locked-screen');
-          W=ls?ls.clientWidth:window.innerWidth;
-          H=ls?ls.clientHeight:window.innerHeight;
+          W = ls ? ls.clientWidth  : window.innerWidth;
+          H = ls ? ls.clientHeight : window.innerHeight;
         } else {
-          W=window.innerWidth; H=window.innerHeight;
+          W = window.innerWidth;
+          H = window.innerHeight;
         }
-        if(!W||W<10) W=window.innerWidth||800;
-        if(!H||H<10) H=window.innerHeight||600;
-        return true;
+        if(!W||W<10){ W=window.innerWidth||800; }
+        if(!H||H<10){ H=window.innerHeight||600; }
       }
 
       function applySize(){
-        var dpr=window.devicePixelRatio||1;
-        canvas.width=Math.round(W*dpr);
-        canvas.height=Math.round(H*dpr);
-        ctx.setTransform(dpr,0,0,dpr,0,0);
+        var dpr = window.devicePixelRatio || 1;
+        canvas.width  = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
       function buildGeom(){
-        branches=[]; leaves=[];
-        var tLen=Math.min(H*trunkScale, 120);
+        branches = []; leaves = [];
+        var tLen = Math.min(H * cfg.trunkH, 130);
         function brnch(x1,y1,len,angle,width,depth,delay){
           var x2=x1+Math.sin(angle)*len, y2=y1-Math.cos(angle)*len;
           branches.push({x1:x1,y1:y1,x2:x2,y2:y2,w:width,delay:delay});
           if(depth>=3){
-            var n=leafCount[0]+Math.floor(Math.random()*(leafCount[1]-leafCount[0]+1));
+            var n = cfg.lMin + Math.floor(Math.random()*(cfg.lMax-cfg.lMin+1));
             for(var i=0;i<n;i++){
               leaves.push({
-                x:x2+(Math.random()-.5)*34,y:y2+(Math.random()-.5)*28,
-                fs:Math.random()*13+8, size:0,
-                color:PAL[Math.floor(Math.random()*PAL.length)],
-                rot:Math.random()*Math.PI*2,
-                swS:Math.random()*.025+.018, swO:Math.random()*Math.PI*2,
-                bd:delay+.28+Math.random()*.13, alpha:0
+                x:  x2+(Math.random()-.5)*36,
+                y:  y2+(Math.random()-.5)*30,
+                fs: Math.random()*13+8, size:0,
+                color: PAL[Math.floor(Math.random()*PAL.length)],
+                rot:   Math.random()*Math.PI*2,
+                swS:   Math.random()*.022+.016,
+                swO:   Math.random()*Math.PI*2,
+                bd:    delay+.28+Math.random()*.14,
+                alpha: 0
               });
             }
           }
-          if(depth<maxDepth){
+          if(depth < cfg.maxD){
             brnch(x2,y2,len*.76,angle-.38+(Math.random()*.1),width*.68,depth+1,delay+.07);
             brnch(x2,y2,len*.73,angle+.40-(Math.random()*.1),width*.68,depth+1,delay+.08);
             if(Math.random()>.32) brnch(x2,y2,len*.63,angle+(Math.random()-.5)*.32,width*.62,depth+1,delay+.10);
           }
         }
-        brnch(W*.5, H*.96, tLen, 0, mode==='bg'?18:15, 1, 0);
+        brnch(W*.5, H*.965, tLen, 0, mode==='locked'?16:18, 1, 0);
       }
 
       function drawHeart(x,y,size,color,rot,alpha){
         if(size<.2) return;
         ctx.save(); ctx.translate(x,y); ctx.rotate(rot);
-        ctx.globalAlpha=Math.max(0,Math.min(1,alpha)); ctx.fillStyle=color;
-        var s=size*.52;
-        ctx.beginPath(); ctx.moveTo(0,s*.3);
+        ctx.globalAlpha = Math.max(0,Math.min(1,alpha));
+        ctx.fillStyle   = color;
+        var s = size*.52;
+        ctx.beginPath();
+        ctx.moveTo(0,s*.3);
         ctx.bezierCurveTo(-s*.5,-s*.3,-s,s*.2,0,s);
         ctx.bezierCurveTo(s,s*.2,s*.5,-s*.3,0,s*.3);
         ctx.fill(); ctx.restore();
@@ -682,200 +730,254 @@
 
       function spawnFaller(cx,cy){
         fallers.push({
-          x:cx!==undefined?cx:W*.5+(Math.random()-.5)*W*.7,
-          y:cy!==undefined?cy:H*.35+(Math.random()-.5)*H*.25,
-          size:Math.random()*11+7,
-          color:PAL[Math.floor(Math.random()*PAL.length)],
-          vx:(Math.random()-.5)*1.4,vy:Math.random()*1.1+.55,
-          rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.035,alpha:.88
+          x:   cx !== undefined ? cx : W*.5+(Math.random()-.5)*W*.72,
+          y:   cy !== undefined ? cy : H*.34+(Math.random()-.5)*H*.26,
+          size: Math.random()*12+7,
+          color: PAL[Math.floor(Math.random()*PAL.length)],
+          vx:  (Math.random()-.5)*1.4,
+          vy:  Math.random()*1.1+.5,
+          rot: Math.random()*Math.PI*2,
+          rs:  (Math.random()-.5)*.035,
+          alpha: .88
         });
       }
 
       function frame(){
         ctx.clearRect(0,0,W,H);
-        t+=.016;
-        if(progress<1){ progress+=growSpeed; if(progress>=1) progress=1; }
+        t += .016;
+        if(progress < 1){ progress += cfg.speed; if(progress >= 1) progress = 1; }
 
-        // Ветки
+        // — Ветки —
         for(var i=0;i<branches.length;i++){
-          var b=branches[i];
-          if(progress>b.delay){
-            var lT=Math.min(1,(progress-b.delay)/.15);
-            var cx=b.x1+(b.x2-b.x1)*lT, cy=b.y1+(b.y2-b.y1)*lT;
+          var b = branches[i];
+          if(progress > b.delay){
+            var lT = Math.min(1,(progress-b.delay)/.14);
+            var cx = b.x1+(b.x2-b.x1)*lT;
+            var cy = b.y1+(b.y2-b.y1)*lT;
             ctx.beginPath(); ctx.moveTo(b.x1,b.y1); ctx.lineTo(cx,cy);
-            ctx.strokeStyle=strokeColor;
-            ctx.lineWidth=Math.max(.8,b.w*(.36+.64*lT)); ctx.lineCap='round'; ctx.stroke();
-            // Золотой огонёк на кончике растущей ветки
-            if(lT>0&&lT<.98){
+            ctx.globalAlpha = cfg.strokeAlpha;
+            ctx.strokeStyle = '#5a1828';
+            ctx.lineWidth   = Math.max(.7,b.w*(.34+.66*lT));
+            ctx.lineCap     = 'round'; ctx.stroke(); ctx.globalAlpha = 1;
+            // Золотой огонёк на кончике
+            if(lT > .04 && lT < .97){
               ctx.save();
-              ctx.fillStyle='#FFD700'; ctx.shadowColor='#FFD700'; ctx.shadowBlur=12;
-              ctx.beginPath(); ctx.arc(cx,cy,2.6,0,Math.PI*2); ctx.fill();
+              ctx.fillStyle = '#FFD700'; ctx.shadowColor = '#FFD700'; ctx.shadowBlur = 13;
+              ctx.globalAlpha = .92;
+              ctx.beginPath(); ctx.arc(cx,cy,2.7,0,Math.PI*2); ctx.fill();
               ctx.restore();
             }
           }
         }
 
-        // Листья-сердечки
+        // — Листья-сердечки —
         for(var j=0;j<leaves.length;j++){
-          var l=leaves[j];
-          if(progress>l.bd){
-            var bT=Math.min(1,(progress-l.bd)/.12);
-            var sp=Math.sin(bT*Math.PI*.5)*(1+.2*Math.sin(bT*Math.PI));
-            l.size=l.fs*sp; l.alpha=bT*.88;
-            var sway=Math.sin(t*l.swS*60+l.swO)*3.5;
-            drawHeart(l.x+sway,l.y,l.size,l.color,l.rot+sway*.038,l.alpha);
+          var l = leaves[j];
+          if(progress > l.bd){
+            var bT  = Math.min(1,(progress-l.bd)/.12);
+            var sp  = Math.sin(bT*Math.PI*.5)*(1+.2*Math.sin(bT*Math.PI));
+            l.size  = l.fs*sp;
+            l.alpha = bT*.9;
+            var sway = Math.sin(t*l.swS*60+l.swO)*3.8;
+            // Мягкое свечение
+            ctx.save();
+            ctx.shadowColor = l.color; ctx.shadowBlur = 6;
+            drawHeart(l.x+sway, l.y, l.size, l.color, l.rot+sway*.038, l.alpha);
+            ctx.restore();
           }
         }
 
-        // Падающие сердечки (после роста дерева на 60%)
-        if(progress>.6&&Math.random()<fallerRate) spawnFaller();
+        // — Падающие сердечки —
+        if(progress > .58 && Math.random() < cfg.fallRate) spawnFaller();
         for(var k=fallers.length-1;k>=0;k--){
-          var f=fallers[k];
-          f.x+=f.vx+Math.sin(t*2+f.y*.02)*.5; f.y+=f.vy; f.rot+=f.rs;
+          var f = fallers[k];
+          f.x += f.vx + Math.sin(t*2+f.y*.02)*.55;
+          f.y += f.vy; f.rot += f.rs;
           drawHeart(f.x,f.y,f.size,f.color,f.rot,f.alpha);
-          if(f.y>H+12) fallers.splice(k,1);
+          if(f.y > H+14) fallers.splice(k,1);
         }
 
         requestAnimationFrame(frame);
       }
 
-      // Клик: взрыв сердец (только для locked-screen)
-      if(mode==='locked'){
-        canvas.addEventListener('click',function(e){
-          var r=canvas.getBoundingClientRect();
-          var cx=(e.clientX-r.left)*(W/r.width), cy=(e.clientY-r.top)*(H/r.height);
-          for(var i=0;i<18;i++) spawnFaller(cx+(Math.random()-.5)*45,cy+(Math.random()-.5)*45);
+      // Клик по locked-screen — взрыв сердец
+      if(mode === 'locked'){
+        var ls = document.getElementById('locked-screen');
+        if(ls) ls.addEventListener('click', function(e){
+          if(e.target.tagName === 'BUTTON') return;
+          var r  = canvas.getBoundingClientRect();
+          var cx = (e.clientX-r.left)*(W/r.width);
+          var cy = (e.clientY-r.top)*(H/r.height);
+          for(var i=0;i<16;i++) spawnFaller(cx+(Math.random()-.5)*42, cy+(Math.random()-.5)*42);
         });
       }
 
-      window.addEventListener('resize',function(){
+      window.addEventListener('resize', function(){
         measure(); applySize(); buildGeom();
       });
 
-      // Запускаем только когда есть реальные размеры
       this.startIfNeeded = function(){
-        if(!running && measure() && W>0 && H>0){
-          running=true; applySize(); buildGeom(); frame();
+        if(running) return;
+        measure();
+        if(W > 0 && H > 0){
+          running = true;
+          applySize(); buildGeom(); frame();
         }
       };
 
-      var self=this;
-      if(window.ResizeObserver && mode==='locked'){
-        var ls=document.getElementById('locked-screen');
-        if(ls){
-          var ro=new ResizeObserver(function(){
-            if(!running && ls.offsetWidth>0){ self.startIfNeeded(); ro.disconnect(); }
-          });
-          ro.observe(ls);
-        }
+      // Запустить через ResizeObserver или setTimeout
+      var self = this;
+      var target = (mode === 'locked')
+        ? document.getElementById('locked-screen')
+        : document.documentElement;
+
+      if(window.ResizeObserver && target){
+        var ro = new ResizeObserver(function(){
+          if(!running && target.clientWidth > 0){
+            self.startIfNeeded();
+            ro.disconnect();
+          }
+        });
+        ro.observe(target);
       }
-      self.startIfNeeded();
+      // Запасной вариант
+      setTimeout(function(){ self.startIfNeeded(); }, 100);
     }
 
-    // Инициализация дерева locked-screen
-    var lockedTreeInited=false;
-    function initLockedTree(){
-      if(lockedTreeInited) return; lockedTreeInited=true;
-      window.mainTree=new HeartTree('locked-tree-canvas','locked');
-    }
+    // Инициализация дерева таймера
+    window._lockedTree = new HeartTree('locked-tree-canvas','locked');
 
     // Инициализация фонового дерева поздравления
-    var bgTreeInited=false;
-    function initBgTree(){
-      if(bgTreeInited) return; bgTreeInited=true;
-      window.bgTree=new HeartTree('bg-tree-canvas','bg');
-      // startIfNeeded уже вызван в конструкторе
-    }
-
-    // При вызове unlockWebsite мы вызываем bgTree.startIfNeeded()
-    // Но bgTree может ещё не существовать — создаём его заблаговременно
-    // в unlockWebsite, дополнив логику:
-    var _origUnlock=unlockWebsite;
-    unlockWebsite=function(anim){
-      initBgTree(); // создать до вызова оригинала
-      _origUnlock(anim);
+    window._initBgTree = function(){
+      if(window._bgTree) return;
+      window._bgTree = new HeartTree('bg-tree-canvas','bg');
     };
 
-    // ── SCROLL REVEAL ──────────────────────────────────────────────
-    function startScrollReveal(){
-      var els=document.querySelectorAll('#main-content .reveal');
-      var obs=new IntersectionObserver(function(entries){
+    // Scroll reveal
+    window._startReveal = function(){
+      var els = document.querySelectorAll('#main-content .reveal');
+      var obs = new IntersectionObserver(function(entries){
         entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('active'); });
       },{threshold:.08,rootMargin:'0px 0px -28px 0px'});
       els.forEach(function(el){ obs.observe(el); });
+    };
+
+    // Проверить сохранённый доступ
+    if(SafeStorage.get('ira_ok')==='yes' || new Date() >= TARGET_DATE){
+      unlockWebsite(false);
     }
 
-    // ── ФОНОВЫЕ ЛЕПЕСТКИ ──────────────────────────────────────────
+    // ──────────────────────────────────────────────
+    //  ФОНОВЫЕ ЛЕПЕСТКИ
+    // ──────────────────────────────────────────────
     (function(){
-      var c=document.getElementById('petals-canvas'); if(!c) return;
-      var x=c.getContext('2d'),W,H;
+      var c = document.getElementById('petals-canvas'); if(!c) return;
+      var x = c.getContext('2d'), W, H;
       function sz(){ W=c.width=window.innerWidth; H=c.height=window.innerHeight; }
       sz(); window.addEventListener('resize',sz);
-      var ps=[],n=window.innerWidth<700?15:26,cols=['#D88C9A','#F7E1E5','#C9A86A','#FFB3C1'];
+      var ps=[],n=window.innerWidth<700?14:24;
+      var cols=['#D88C9A','#F7E1E5','#C9A86A','#FFB3C1'];
       for(var i=0;i<n;i++) ps.push({
-        x:Math.random()*W,y:Math.random()*H,
-        sz:Math.random()*9+7,vy:Math.random()*.9+.38,vx:Math.random()*.44-.22,
-        rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.016,
-        c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*.38+.24
+        x:Math.random()*W, y:Math.random()*H,
+        sz:Math.random()*9+7, vy:Math.random()*.9+.38, vx:Math.random()*.44-.22,
+        rot:Math.random()*Math.PI*2, rs:(Math.random()-.5)*.016,
+        c:cols[Math.floor(Math.random()*cols.length)], a:Math.random()*.36+.22
       });
       (function loop(){
         x.clearRect(0,0,W,H);
         ps.forEach(function(p){
-          p.y+=p.vy;p.x+=p.vx;p.rot+=p.rs;
-          if(p.y>H+15){p.y=-15;p.x=Math.random()*W;}
-          x.save();x.translate(p.x,p.y);x.rotate(p.rot);x.globalAlpha=p.a;x.fillStyle=p.c;
-          x.beginPath();x.moveTo(0,0);x.bezierCurveTo(-p.sz/2,-p.sz/2,-p.sz/2,p.sz/2,0,p.sz);x.bezierCurveTo(p.sz/2,p.sz/2,p.sz/2,-p.sz/2,0,0);
-          x.fill();x.restore();
+          p.y+=p.vy; p.x+=p.vx; p.rot+=p.rs;
+          if(p.y>H+15){ p.y=-15; p.x=Math.random()*W; }
+          x.save(); x.translate(p.x,p.y); x.rotate(p.rot); x.globalAlpha=p.a; x.fillStyle=p.c;
+          x.beginPath(); x.moveTo(0,0);
+          x.bezierCurveTo(-p.sz/2,-p.sz/2,-p.sz/2,p.sz/2,0,p.sz);
+          x.bezierCurveTo(p.sz/2,p.sz/2,p.sz/2,-p.sz/2,0,0);
+          x.fill(); x.restore();
         });
         requestAnimationFrame(loop);
       })();
     })();
 
-    // ── КОНФЕТТИ + ЗВУК ───────────────────────────────────────────
+    // ──────────────────────────────────────────────
+    //  КОНФЕТТИ + ЗВУК
+    // ──────────────────────────────────────────────
     function launchConfetti(){
       var cols=['#5C1A2E','#D88C9A','#F7E1E5','#C9A86A','#FF4D6D','#FFD166'];
-      var pc=[],c=document.getElementById('petals-canvas'); if(!c) return;
-      var cx=c.getContext('2d'),W2=window.innerWidth,H2=window.innerHeight;
+      var pc=[], c=document.getElementById('petals-canvas'); if(!c) return;
+      var cx2=c.getContext('2d'), W2=window.innerWidth, H2=window.innerHeight;
       for(var i=0;i<100;i++) pc.push({x:W2/2,y:H2/2+40,vx:(Math.random()-.5)*19,vy:(Math.random()-.82)*18,sz:Math.random()*8+4,c:cols[Math.floor(Math.random()*cols.length)],rot:Math.random()*360,rs:(Math.random()-.5)*10,a:1});
       (function upd(){
         if(!pc.length) return;
-        for(var i=pc.length-1;i>=0;i--){ var p=pc[i]; p.x+=p.vx;p.y+=p.vy;p.vy+=.34;p.rot+=p.rs;p.a-=.012; if(p.a<=0){pc.splice(i,1);continue;} cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);cx.globalAlpha=Math.max(0,p.a);cx.fillStyle=p.c;cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz*.57);cx.restore(); }
+        for(var i=pc.length-1;i>=0;i--){ var p=pc[i]; p.x+=p.vx;p.y+=p.vy;p.vy+=.34;p.rot+=p.rs;p.a-=.012; if(p.a<=0){pc.splice(i,1);continue;} cx2.save();cx2.translate(p.x,p.y);cx2.rotate(p.rot*Math.PI/180);cx2.globalAlpha=Math.max(0,p.a);cx2.fillStyle=p.c;cx2.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz*.57);cx2.restore(); }
         if(pc.length) requestAnimationFrame(upd);
       })();
     }
     function sparkleSound(){
-      try{ var A=window.AudioContext||window.webkitAudioContext;if(!A)return;var ac=new A();[523,659,784,1047,1319].forEach(function(f,i){var o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.setValueAtTime(f,ac.currentTime+i*.09);g.gain.setValueAtTime(0,ac.currentTime+i*.09);g.gain.linearRampToValueAtTime(.11,ac.currentTime+i*.09+.04);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+i*.09+.75);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+i*.09);o.stop(ac.currentTime+i*.09+.77);}); }catch(e){}
+      try{
+        var A=window.AudioContext||window.webkitAudioContext; if(!A) return; var ac=new A();
+        [523,659,784,1047,1319].forEach(function(f,i){ var o=ac.createOscillator(),g=ac.createGain(); o.type='sine'; o.frequency.setValueAtTime(f,ac.currentTime+i*.09); g.gain.setValueAtTime(0,ac.currentTime+i*.09); g.gain.linearRampToValueAtTime(.11,ac.currentTime+i*.09+.04); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+i*.09+.75); o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+i*.09);o.stop(ac.currentTime+i*.09+.77); });
+      }catch(e){}
     }
 
-    // ── ТОРТ ──────────────────────────────────────────────────────
-    var cakeStage=document.getElementById('cake-stage'),cakePrompt=document.getElementById('cake-prompt'),wishBox=document.getElementById('wish-box'),relightBtn=document.getElementById('relight-btn'),blown=false;
-    if(cakeStage) cakeStage.addEventListener('click',function(){ if(blown)return;blown=true;cakeStage.classList.add('blown');if(cakePrompt)cakePrompt.textContent='✨ Желание загадано! С Днём Рождения! 🎉';launchConfetti();sparkleSound();setTimeout(function(){if(wishBox)wishBox.classList.add('revealed');},530); });
-    if(relightBtn) relightBtn.addEventListener('click',function(e){ e.stopPropagation();blown=false;if(cakeStage)cakeStage.classList.remove('blown');if(wishBox)wishBox.classList.remove('revealed');if(cakePrompt)cakePrompt.textContent='🕯️ Загадай самое заветное желание и нажми на свечи!'; });
+    // ──────────────────────────────────────────────
+    //  ТОРТ
+    // ──────────────────────────────────────────────
+    var cakeStage=document.getElementById('cake-stage');
+    var cakePrompt=document.getElementById('cake-prompt');
+    var wishBox=document.getElementById('wish-box');
+    var relightBtn=document.getElementById('relight-btn');
+    var blown=false;
+    if(cakeStage) cakeStage.addEventListener('click',function(){
+      if(blown) return; blown=true;
+      cakeStage.classList.add('blown');
+      if(cakePrompt) cakePrompt.textContent='✨ Желание загадано! С Днём Рождения! 🎉';
+      launchConfetti(); sparkleSound();
+      setTimeout(function(){ if(wishBox) wishBox.classList.add('revealed'); },530);
+    });
+    if(relightBtn) relightBtn.addEventListener('click',function(e){
+      e.stopPropagation(); blown=false;
+      if(cakeStage) cakeStage.classList.remove('blown');
+      if(wishBox) wishBox.classList.remove('revealed');
+      if(cakePrompt) cakePrompt.textContent='🕯️ Загадай самое заветное желание и нажми на свечи!';
+    });
 
-    // ── ПОЦЕЛУЙ ───────────────────────────────────────────────────
+    // ──────────────────────────────────────────────
+    //  ПОЦЕЛУЙ
+    // ──────────────────────────────────────────────
     var kissBtn=document.getElementById('kiss-btn');
     if(kissBtn) kissBtn.addEventListener('click',function(){
       var r=kissBtn.getBoundingClientRect(),ox=r.left+r.width/2,oy=r.top+r.height/2;
       var icons=['💖','💋','❤️','🌸','✨','💕'];
       for(var i=0;i<13;i++)(function(){
-        var f=document.createElement('div');f.textContent=icons[Math.floor(Math.random()*icons.length)];
-        f.style.cssText='position:fixed;pointer-events:none;z-index:999999;font-size:'+(Math.random()*13+17)+'px;left:'+ox+'px;top:'+oy+'px;transform:translate(-50%,-50%);transition:all 1.5s cubic-bezier(0.23,1,0.32,1)';
+        var f=document.createElement('div');
+        f.textContent=icons[Math.floor(Math.random()*icons.length)];
+        f.style.cssText='position:fixed;pointer-events:none;z-index:999999;font-size:'+(Math.random()*13+17)+'px;left:'+ox+'px;top:'+oy+'px;transform:translate(-50%,-50%);transition:all 1.5s cubic-bezier(.23,1,.32,1)';
         document.body.appendChild(f);
         var dx=ox+(Math.random()-.5)*220,dy=oy-(Math.random()*170+90);
-        requestAnimationFrame(function(){f.style.left=dx+'px';f.style.top=dy+'px';f.style.opacity='0';f.style.transform='translate(-50%,-50%) scale('+(Math.random()*.8+1.1)+')';});
-        setTimeout(function(){f.remove();},1520);
+        requestAnimationFrame(function(){ f.style.left=dx+'px';f.style.top=dy+'px';f.style.opacity='0';f.style.transform='translate(-50%,-50%) scale('+(Math.random()*.8+1.1)+')'; });
+        setTimeout(function(){ f.remove(); },1520);
       })();
     });
 
-    // ── LIGHTBOX ──────────────────────────────────────────────────
-    var lb=document.getElementById('lightbox'),lbImg=document.getElementById('lb-img'),lbCap=document.getElementById('lb-cap'),lbClose=document.getElementById('lb-close');
+    // ──────────────────────────────────────────────
+    //  LIGHTBOX
+    // ──────────────────────────────────────────────
+    var lb=document.getElementById('lightbox');
+    var lbImg=document.getElementById('lb-img');
+    var lbCap=document.getElementById('lb-cap');
+    var lbClose=document.getElementById('lb-close');
     document.querySelectorAll('.polaroid').forEach(function(card){
-      card.addEventListener('click',function(){ var img=card.querySelector('.pimg'),cap=card.getAttribute('data-cap');if(lbImg&&img)lbImg.src=img.src;if(lbCap)lbCap.textContent=cap||'';if(lb)lb.classList.add('active'); });
+      card.addEventListener('click',function(){
+        var img=card.querySelector('.pimg'),cap=card.getAttribute('data-cap');
+        if(lbImg&&img) lbImg.src=img.src;
+        if(lbCap) lbCap.textContent=cap||'';
+        if(lb) lb.classList.add('active');
+      });
     });
-    function closeLb(){if(lb)lb.classList.remove('active');}
+    function closeLb(){ if(lb) lb.classList.remove('active'); }
     if(lbClose) lbClose.addEventListener('click',closeLb);
-    if(lb) lb.addEventListener('click',function(e){if(e.target===lb)closeLb();});
-    document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb();});
+    if(lb) lb.addEventListener('click',function(e){ if(e.target===lb) closeLb(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeLb(); });
   </script>
 </body>
 </html>
