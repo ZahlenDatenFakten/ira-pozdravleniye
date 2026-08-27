@@ -35,17 +35,39 @@
     body{font-family:var(--fb);background:var(--cream);overflow-x:hidden;color:var(--dark)}
     ::selection{background:var(--rosel);color:var(--deep)}
 
-    /* ── ЛЕПЕСТКИ ────────────────────────────────────── */
-    #petals-canvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1}
+    /* ── ФОНОВОЕ СЛАЙД-ШОУ (CROSSFADE АНИМАЦИЯ) ──────── */
+    #bg-slideshow{
+      position:fixed;inset:0;width:100vw;height:100vh;
+      z-index:-2;overflow:hidden;pointer-events:none;
+    }
+    .bg-slide{
+      position:absolute;inset:0;
+      background-size:cover;background-position:center;background-repeat:no-repeat;
+      opacity:0;transform:scale(1.04);
+      transition:opacity 2.6s cubic-bezier(.4,0,.2,1), transform 8s cubic-bezier(.25,1,.5,1);
+      will-change:opacity, transform;
+    }
+    .bg-slide.active{
+      opacity:1;transform:scale(1);
+    }
+    .bg-overlay{
+      position:absolute;inset:0;
+      background:radial-gradient(circle at center, rgba(255,248,243,.68) 0%, rgba(255,245,240,.82) 100%);
+      backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+      z-index:1;
+    }
+
+    /* ── ПАРЯЩИЕ БЛЁСТКИ И ЛЕПЕСТКИ ──────────────────── */
+    #petals-canvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:-1}
 
     /* ── ФОНОВОЕ ДЕРЕВО ПОЗДРАВЛЕНИЯ ─────────────────── */
     #bg-tree-canvas{
       position:fixed;inset:0;width:100vw;height:100vh;
-      pointer-events:none;z-index:2;
+      pointer-events:none;z-index:0;
       display:none;opacity:0;
       transition:opacity 3s ease;
     }
-    #bg-tree-canvas.visible{opacity:1}
+    #bg-tree-canvas.visible{opacity:.85}
 
     /* ============================================================
        LOCKED SCREEN — Midnight Cinema
@@ -206,26 +228,182 @@
     .lhl{background:linear-gradient(120deg,rgba(247,225,229,.8),rgba(235,181,191,.4));padding:2px 5px;border-radius:4px;font-weight:600;color:#431221}
     .lps{margin-top:26px;padding-top:17px;border-top:1px dashed var(--rose);font-family:var(--fsc);font-size:1.48rem;color:var(--burg)}
 
-    /* ГАЛЕРЕЯ */
-    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:24px 17px;max-width:920px;margin:0 auto;padding:8px}
-    .polaroid{background:#fff;padding:11px 11px 20px;border-radius:3px;box-shadow:0 9px 21px rgba(92,26,46,.1),0 2px 4px rgba(0,0,0,.04);cursor:pointer;position:relative;transition:transform .4s var(--ease),box-shadow .4s}
-    .ptape{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:68px;height:20px;background:rgba(255,248,235,.84);border:1px dashed rgba(201,168,106,.34);z-index:2}
-    .polaroid:nth-child(1){transform:rotate(-2.4deg)}.polaroid:nth-child(2){transform:rotate(1.7deg)}.polaroid:nth-child(3){transform:rotate(-1.4deg)}.polaroid:nth-child(4){transform:rotate(2.1deg)}.polaroid:nth-child(5){transform:rotate(-1.9deg)}.polaroid:nth-child(6){transform:rotate(1.3deg)}
-    .polaroid:hover{transform:rotate(0) scale(1.04) translateY(-7px)!important;z-index:10;box-shadow:0 17px 34px rgba(92,26,46,.19)}
-    .pimgw{width:100%;aspect-ratio:1;overflow:hidden;border-radius:2px;background:var(--blush)}
-    .pimg{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
-    .polaroid:hover .pimg{transform:scale(1.05)}
-    .pcap{font-family:var(--fsc);font-size:1.28rem;color:var(--burg);text-align:center;margin-top:10px}
+    /* ── СЕКЦИЯ: 21 ГРАНЬ МОЕЙ ЛЮБВИ ────────────────── */
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px 20px;
+      max-width: 960px;
+      margin: 0 auto 36px;
+      padding: 0 4px;
+    }
+    .reason-card {
+      background: rgba(255, 255, 255, 0.88);
+      border-radius: var(--rlg);
+      padding: 28px 24px;
+      box-shadow: var(--sh);
+      border: 1px solid rgba(216, 140, 154, 0.32);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s;
+    }
+    .reason-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--rose), var(--gold), var(--rosel));
+      opacity: 0.8;
+    }
+    .reason-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shr);
+      border-color: rgba(201, 168, 106, 0.55);
+    }
+    .rc-icon-wrap {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blush), #FFF);
+      border: 1px solid rgba(216, 140, 154, 0.4);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(92, 26, 46, 0.07);
+    }
+    .rc-icon { font-size: 1.5rem; }
+    .rc-title {
+      font-family: var(--fd);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--burg);
+      margin-bottom: 10px;
+    }
+    .rc-desc {
+      font-family: var(--fs);
+      font-size: 1.12rem;
+      line-height: 1.6;
+      color: var(--dark);
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+    .rc-tag {
+      align-self: flex-start;
+      font-family: var(--fb);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(201, 168, 106, 0.12);
+      padding: 4px 12px;
+      border-radius: var(--rf);
+    }
 
-    /* LIGHTBOX */
-    #lightbox{position:fixed;inset:0;background:rgba(18,4,10,.88);backdrop-filter:blur(12px);z-index:999999;display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .3s}
-    #lightbox.active{opacity:1;pointer-events:auto}
-    .lb-content{max-width:88vw;max-height:84vh;background:#fff;padding:12px 12px 23px;border-radius:5px;box-shadow:0 22px 50px rgba(0,0,0,.44);transform:scale(.9);transition:transform .33s var(--ease);display:flex;flex-direction:column;align-items:center}
-    #lightbox.active .lb-content{transform:scale(1)}
-    .lb-img{max-width:100%;max-height:63vh;object-fit:contain;border-radius:3px}
-    .lb-cap{font-family:var(--fsc);font-size:1.55rem;color:var(--burg);margin-top:10px}
-    .lb-close{position:absolute;top:17px;right:21px;width:40px;height:40px;background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.34);color:#fff;font-size:1.32rem;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .23s}
-    .lb-close:hover{background:var(--burg);transform:rotate(90deg)}
+    /* ШКАТУЛКА ПРИЗНАНИЙ */
+    .love-box-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.94), rgba(255,248,243,0.96));
+      border-radius: var(--rlg);
+      padding: clamp(28px, 5vw, 44px) 24px;
+      box-shadow: var(--shr);
+      border: 1.5px solid rgba(201, 168, 106, 0.45);
+      max-width: 820px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      backdrop-filter: blur(14px);
+    }
+    .lb-header { margin-bottom: 20px; }
+    .lb-badge {
+      display: inline-block;
+      font-family: var(--fb);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--burg);
+      background: rgba(247, 225, 229, 0.85);
+      border: 1px solid var(--rosel);
+      padding: 6px 18px;
+      border-radius: var(--rf);
+      margin-bottom: 14px;
+      box-shadow: var(--sh);
+    }
+    .lb-title {
+      font-family: var(--fd);
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      color: var(--burg);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .lb-sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+    .lb-display {
+      background: #FFF;
+      border-radius: var(--rmd);
+      padding: 24px 20px;
+      border: 1.5px dashed var(--rose);
+      margin-bottom: 24px;
+      box-shadow: inset 0 2px 10px rgba(92, 26, 46, 0.03);
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s var(--ease), border-color 0.3s;
+    }
+    .lb-display.pop {
+      transform: scale(1.02);
+      border-color: var(--gold);
+    }
+    .lb-text {
+      font-family: var(--fs);
+      font-size: clamp(1.18rem, 2.6vw, 1.45rem);
+      font-style: italic;
+      color: var(--burg);
+      line-height: 1.6;
+      margin-bottom: 8px;
+      transition: opacity 0.25s ease;
+    }
+    .lb-count {
+      font-family: var(--fb);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .lb-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--burg), #8C2643);
+      color: var(--cream);
+      font-family: var(--fb);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 14px 32px;
+      border-radius: var(--rf);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(92, 26, 46, 0.28);
+      transition: all 0.3s var(--ease);
+    }
+    .lb-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(92, 26, 46, 0.38);
+    }
+    .lb-btn:active {
+      transform: scale(0.97);
+    }
+    .lb-btn-sparkle { font-size: 1.2rem; }
 
     /* ТОРТ */
     .cake-section{background:linear-gradient(180deg,rgba(247,225,229,.35),rgba(255,248,243,.78));border-radius:var(--rlg);padding:clamp(30px,6vw,66px) 18px;border:1px solid rgba(201,168,106,.24);box-shadow:var(--shr);text-align:center;position:relative;overflow:hidden;backdrop-filter:blur(8px)}
@@ -404,12 +582,19 @@
   <audio id="sfx-writing" src="sfx_writing.mp3" preload="auto"></audio>
   <audio id="sfx-reveal" src="sfx_reveal.mp3" preload="auto"></audio>
 
+  <!-- ФОНОВОЕ СЛАЙД-ШОУ (АКВАРЕЛЬНЫЕ ЦВЕТЫ) -->
+  <div id="bg-slideshow" aria-hidden="true">
+    <div class="bg-slide active" id="bg-slide-a" style="background-image:url('assets/backgrounds/bg1.jpg')"></div>
+    <div class="bg-slide" id="bg-slide-b" style="background-image:url('assets/backgrounds/bg2.jpg')"></div>
+    <div class="bg-overlay"></div>
+  </div>
+
   <!-- INTRO SCREEN -->
   <div id="intro-screen" onclick="startCinematicIntro()">
     <div class="intro-pulse">Коснитесь экрана</div>
   </div>
 
-  <!-- Фоновые лепестки -->
+  <!-- Парящие блёстки и лепестки -->
   <canvas id="petals-canvas"></canvas>
 
   <!-- Фоновое дерево поздравления -->
@@ -493,15 +678,71 @@
       </article>
     </section>
 
-    <section class="section-wrap" id="gallery-section">
-      <div class="section-hd reveal"><span class="stag">Твоя улыбка озаряет мир</span><h2 class="stitle">Наши моменты счастья</h2></div>
-      <div class="gallery-grid">
-        <div class="polaroid reveal" data-cap="Самая красивая улыбка ✨"><div class="ptape"></div><div class="pimgw"><img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80" class="pimg" loading="lazy"></div><div class="pcap">Самая красивая улыбка ✨</div></div>
-        <div class="polaroid reveal rd1" data-cap="Моё нежное вдохновение 🌸"><div class="ptape"></div><div class="pimgw"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" class="pimg" loading="lazy"></div><div class="pcap">Моё нежное вдохновение 🌸</div></div>
-        <div class="polaroid reveal rd2" data-cap="Наши тёплые закаты 🌅"><div class="ptape"></div><div class="pimgw"><img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80" class="pimg" loading="lazy"></div><div class="pcap">Наши тёплые закаты 🌅</div></div>
-        <div class="polaroid reveal" data-cap="Уютные вечера вместе ☕"><div class="ptape"></div><div class="pimgw"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80" class="pimg" loading="lazy"></div><div class="pcap">Уютные вечера вместе ☕</div></div>
-        <div class="polaroid reveal rd1" data-cap="Ты — мой главный праздник 💖"><div class="ptape"></div><div class="pimgw"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" class="pimg" loading="lazy"></div><div class="pcap">Ты — мой главный праздник 💖</div></div>
-        <div class="polaroid reveal rd2" data-cap="Вместе навсегда 💍"><div class="ptape"></div><div class="pimgw"><img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=600&q=80" class="pimg" loading="lazy"></div><div class="pcap">Вместе навсегда 💍</div></div>
+    <section class="section-wrap" id="reasons-section">
+      <div class="section-hd reveal">
+        <span class="stag">Почему моё сердце выбрало тебя</span>
+        <h2 class="stitle">21 грань моей любви</h2>
+      </div>
+
+      <!-- Карточки главных качеств -->
+      <div class="reasons-grid">
+        <div class="reason-card reveal rd1">
+          <div class="rc-icon-wrap"><span class="rc-icon">💎</span></div>
+          <h3 class="rc-title">Искренность и чистота</h3>
+          <p class="rc-desc">Твоё доброе, невероятно чуткое сердце и способность видеть свет во всём делают наш мир по-настоящему чистым и тёплым.</p>
+          <div class="rc-tag">#ТвояДуша</div>
+        </div>
+
+        <div class="reason-card reveal rd2">
+          <div class="rc-icon-wrap"><span class="rc-icon">✨</span></div>
+          <h3 class="rc-title">Лучезарная улыбка</h3>
+          <p class="rc-desc">Когда ты улыбаешься, в комнате словно восходит солнце. Твоя улыбка способна развеять любые тучи и наполнить душу покоем.</p>
+          <div class="rc-tag">#МоёСолнце</div>
+        </div>
+
+        <div class="reason-card reveal rd3">
+          <div class="rc-icon-wrap"><span class="rc-icon">🌸</span></div>
+          <h3 class="rc-title">Нежность и забота</h3>
+          <p class="rc-desc">То, как ты прикасаешься, как смотришь в глаза и как обнимаешь — в этом столько трепетной любви, которую я храню превыше всего.</p>
+          <div class="rc-tag">#Нежность</div>
+        </div>
+
+        <div class="reason-card reveal rd1">
+          <div class="rc-icon-wrap"><span class="rc-icon">💫</span></div>
+          <h3 class="rc-title">Звонкий смех</h3>
+          <p class="rc-desc">Твой звонкий, искренний смех — самая красивая мелодия во Вселенной. Слышать его каждый день — моё величайшее счастье.</p>
+          <div class="rc-tag">#МузыкаСердца</div>
+        </div>
+
+        <div class="reason-card reveal rd2">
+          <div class="rc-icon-wrap"><span class="rc-icon">🌟</span></div>
+          <h3 class="rc-title">Мудрость и вдохновение</h3>
+          <p class="rc-desc">Ты веришь в меня так, как никто другой. Твой ум, проницательность и деликатность вдохновляют меня становиться лучше с каждым днем.</p>
+          <div class="rc-tag">#Вдохновение</div>
+        </div>
+
+        <div class="reason-card reveal rd3">
+          <div class="rc-icon-wrap"><span class="rc-icon">🌹</span></div>
+          <h3 class="rc-title">Ты — мой дом</h3>
+          <p class="rc-desc">Где бы мы ни были, рядом с тобой я чувствую себя дома. Ты — моя любимая жена, моё счастье и вся моя вселенная.</p>
+          <div class="rc-tag">#Навсегда</div>
+        </div>
+      </div>
+
+      <!-- Интерактивная шкатулка признаний -->
+      <div class="love-box-card reveal">
+        <div class="lb-header">
+          <span class="lb-badge">✨ Интерактивная шкатулка ✨</span>
+          <h3 class="lb-title">Открой признание для себя</h3>
+          <p class="lb-sub">Нажми на кнопку ниже, чтобы достать одно из 21 особенных посланий о моей любви к тебе</p>
+        </div>
+        <div class="lb-display" id="compliment-display">
+          <div class="lb-text" id="compliment-text">«Ты делаешь каждый мой день счастливым просто тем, что ты есть рядом.» ❤️</div>
+          <div class="lb-count" id="compliment-count">Послание 1 из 21 ✨</div>
+        </div>
+        <button class="lb-btn" id="next-compliment-btn" onclick="nextCompliment()">
+          <span class="lb-btn-sparkle">💖</span> Достать следующее признание
+        </button>
       </div>
     </section>
 
@@ -556,69 +797,7 @@
     </footer>
   </div><!-- /main-content -->
 
-  <!-- LIGHTBOX -->
-  <div id="lightbox">
-    <button class="lb-close" id="lb-close">✕</button>
-    <div class="lb-content"><img src="" class="lb-img" id="lb-img"><div class="lb-cap" id="lb-cap"></div></div>
-  </div>
-
   <script>
-    // ──────────────────────────────────────────────
-    //  АУДИО — локальный файл music.mp3
-    // ──────────────────────────────────────────────
-    var audio = document.getElementById('bg-audio');
-    var audioPlaying = false;
-
-    function updatePlayerUI(){
-      var pw = document.getElementById('player-widget');
-      var pi = document.getElementById('pw-icon');
-      if(audioPlaying){
-        if(pi) pi.textContent = '❚❚';
-        if(pw) pw.classList.add('playing');
-      } else {
-        if(pi) pi.textContent = '▶';
-        if(pw) pw.classList.remove('playing');
-      }
-    }
-
-    function startMusic(){
-      if(!audio) return;
-      var p = audio.play();
-      if(p && p.then){
-        p.then(function(){
-          audioPlaying = true;
-          updatePlayerUI();
-          // Скрыть подсказку после включения
-          var hint = document.querySelector('.music-hint');
-          if(hint){ hint.style.transition='opacity .6s'; hint.style.opacity='0'; setTimeout(function(){ hint.style.display='none'; },700); }
-        }).catch(function(){
-          // Браузер заблокировал — ждём жеста
-        });
-      }
-    }
-
-    function toggleMusic(){
-      if(!audio) return;
-      if(audioPlaying){ audio.pause(); audioPlaying=false; updatePlayerUI(); }
-      else { startMusic(); }
-    }
-
-    // Первый жест запускает музыку автоматически
-    function onFirstGesture(){
-      startMusic();
-      document.removeEventListener('click', onFirstGesture, true);
-      document.removeEventListener('touchstart', onFirstGesture, true);
-    }
-    // capture:true — срабатывает даже если дочерние элементы вызывают stopPropagation
-    document.addEventListener('click', onFirstGesture, { capture: true, once: true });
-    document.addEventListener('touchstart', onFirstGesture, { capture: true, once: true, passive: true });
-
-    // Кнопка плеера
-    var pwBtn = document.getElementById('pw-btn');
-    var pwWidget = document.getElementById('player-widget');
-    if(pwBtn) pwBtn.addEventListener('click', function(e){ e.stopPropagation(); toggleMusic(); });
-    if(pwWidget) pwWidget.addEventListener('click', function(e){ e.stopPropagation(); toggleMusic(); });
-
     // ──────────────────────────────────────────────
     //  ТАЙМЕР
     // ──────────────────────────────────────────────
@@ -860,35 +1039,140 @@
     }
 
     // ──────────────────────────────────────────────
-    //  ФОНОВЫЕ ЛЕПЕСТКИ
+    //  ПАРЯЩИЕ БЛЁСТКИ И ЛЕПЕСТКИ (ВСПЛЫВАЮТ СНИЗУ ВВЕРХ)
     // ──────────────────────────────────────────────
     (function(){
       var c = document.getElementById('petals-canvas'); if(!c) return;
       var x = c.getContext('2d'), W, H;
       function sz(){ W=c.width=window.innerWidth; H=c.height=window.innerHeight; }
       sz(); window.addEventListener('resize',sz);
-      var ps=[],n=window.innerWidth<700?14:24;
-      var cols=['#D88C9A','#F7E1E5','#C9A86A','#FFB3C1'];
+      var ps=[], n=window.innerWidth<700 ? 18 : 34;
+      var cols=['#D88C9A','#F7E1E5','#C9A86A','#FFB3C1','#EBB5BF','#FFFDF9'];
       for(var i=0;i<n;i++) ps.push({
         x:Math.random()*W, y:Math.random()*H,
-        sz:Math.random()*9+7, vy:Math.random()*.9+.38, vx:Math.random()*.44-.22,
-        rot:Math.random()*Math.PI*2, rs:(Math.random()-.5)*.016,
-        c:cols[Math.floor(Math.random()*cols.length)], a:Math.random()*.36+.22
+        sz:Math.random()*8+4,
+        vy:-(Math.random()*.75+.35), // плавный подъём снизу вверх
+        vx:(Math.random()-.5)*.35,
+        rot:Math.random()*Math.PI*2, rs:(Math.random()-.5)*.02,
+        c:cols[Math.floor(Math.random()*cols.length)],
+        a:Math.random()*.45+.22,
+        isSpark: Math.random() > 0.45
       });
       (function loop(){
         x.clearRect(0,0,W,H);
         ps.forEach(function(p){
           p.y+=p.vy; p.x+=p.vx; p.rot+=p.rs;
-          if(p.y>H+15){ p.y=-15; p.x=Math.random()*W; }
+          if(p.y < -20){ p.y=H+20; p.x=Math.random()*W; }
           x.save(); x.translate(p.x,p.y); x.rotate(p.rot); x.globalAlpha=p.a; x.fillStyle=p.c;
-          x.beginPath(); x.moveTo(0,0);
-          x.bezierCurveTo(-p.sz/2,-p.sz/2,-p.sz/2,p.sz/2,0,p.sz);
-          x.bezierCurveTo(p.sz/2,p.sz/2,p.sz/2,-p.sz/2,0,0);
-          x.fill(); x.restore();
+          if(p.isSpark){
+            // Золотистая мерцающая частица
+            x.beginPath();
+            x.arc(0,0,p.sz*0.35,0,Math.PI*2);
+            x.fill();
+          } else {
+            // Нежный лепесток
+            x.beginPath(); x.moveTo(0,0);
+            x.bezierCurveTo(-p.sz/2,-p.sz/2,-p.sz/2,p.sz/2,0,p.sz);
+            x.bezierCurveTo(p.sz/2,p.sz/2,p.sz/2,-p.sz/2,0,0);
+            x.fill();
+          }
+          x.restore();
         });
         requestAnimationFrame(loop);
       })();
     })();
+
+    // ──────────────────────────────────────────────
+    //  ФОНОВОЕ СЛАЙД-ШОУ (CROSSFADE АНИМАЦИЯ)
+    // ──────────────────────────────────────────────
+    (function initBackgroundSlideshow(){
+      var images = [
+        'assets/backgrounds/bg1.jpg',
+        'assets/backgrounds/bg2.jpg',
+        'assets/backgrounds/bg3.jpg',
+        'assets/backgrounds/bg4.jpg',
+        'assets/backgrounds/bg5.jpg'
+      ];
+      var slideA = document.getElementById('bg-slide-a');
+      var slideB = document.getElementById('bg-slide-b');
+      if(!slideA || !slideB) return;
+
+      var currentIdx = 0;
+      var activeSlide = slideA;
+      var hiddenSlide = slideB;
+
+      // Предзагрузка всех картинок
+      images.forEach(function(src){
+        var img = new Image();
+        img.src = src;
+      });
+
+      setInterval(function(){
+        currentIdx = (currentIdx + 1) % images.length;
+        var nextSrc = images[currentIdx];
+
+        // Устанавливаем фон следующему слою
+        hiddenSlide.style.backgroundImage = "url('" + nextSrc + "')";
+
+        // Плавный переход opacity
+        hiddenSlide.classList.add('active');
+        activeSlide.classList.remove('active');
+
+        // Меняем ссылки
+        var temp = activeSlide;
+        activeSlide = hiddenSlide;
+        hiddenSlide = temp;
+      }, 7000);
+    })();
+
+    // ──────────────────────────────────────────────
+    //  21 ПРИЗНАНИЕ / КОМПЛИМЕНТ
+    // ──────────────────────────────────────────────
+    var compliments = [
+      "Ты делаешь каждый мой день счастливым просто тем, что ты есть рядом.",
+      "Твоя улыбка — самое красивое и согревающее, что я когда-либо видел.",
+      "Твоя нежность и тепло способны растопить любые печали.",
+      "С тобой любой разговор становится душевным, а любое молчание — уютным.",
+      "Твой звонкий смех — моя самая любимая музыка на свете.",
+      "Ты вдохновляешь меня расти, мечтать и стремиться к лучшему каждый день.",
+      "Твои глаза сияют ярче всех звёзд на ночном небе.",
+      "В твоих объятиях я всегда чувствую себя дома и под защитой чистой любви.",
+      "Твоя забота и женственность делают нашу жизнь невероятно красивой.",
+      "Твоя мудрость и рассудительность всегда восхищают меня.",
+      "Ты — воплощение грации, красоты и утонченного вкуса.",
+      "Я люблю то, как искренне и трогательно ты радуешься простым моментам.",
+      "Твоя верность и чуткость — самый ценный подарок судьбы.",
+      "Рядом с тобой я чувствую себя самым счастливым мужчиной на Земле.",
+      "Ты умеешь поддержать и окрылить одним только ласковым взглядом.",
+      "Твоя доброта делает этот мир мягче, светлее и прекраснее.",
+      "Ты — моя лучшая половина, моя любимая жена и мой самый близкий друг.",
+      "Каждый день, прожитый с тобой, — это настоящее маленькое чудо.",
+      "Я горжусь тем, какая ты целеустремленная, умная и талантливая.",
+      "Твоя любовь дает мне силы покорять любые вершины.",
+      "В свои 21 год ты невероятно прекрасна, и моя любовь к тебе безгранична! ❤️"
+    ];
+    var currentComplimentIndex = 0;
+    function nextCompliment(){
+      currentComplimentIndex = (currentComplimentIndex + 1) % compliments.length;
+      var textEl = document.getElementById('compliment-text');
+      var countEl = document.getElementById('compliment-count');
+      var disp = document.getElementById('compliment-display');
+      if(disp){
+        disp.classList.add('pop');
+        setTimeout(function(){ disp.classList.remove('pop'); }, 300);
+      }
+      if(textEl){
+        textEl.style.opacity = '0';
+        setTimeout(function(){
+          textEl.textContent = '«' + compliments[currentComplimentIndex] + '»';
+          textEl.style.opacity = '1';
+        }, 150);
+      }
+      if(countEl){
+        countEl.textContent = 'Послание ' + (currentComplimentIndex + 1) + ' из ' + compliments.length + ' ✨';
+      }
+      try { sparkleSound(); } catch(e){}
+    }
 
     // ──────────────────────────────────────────────
     //  КОНФЕТТИ + ЗВУК
@@ -950,26 +1234,6 @@
         setTimeout(function(){ f.remove(); },1520);
       })();
     });
-
-    // ──────────────────────────────────────────────
-    //  LIGHTBOX
-    // ──────────────────────────────────────────────
-    var lb=document.getElementById('lightbox');
-    var lbImg=document.getElementById('lb-img');
-    var lbCap=document.getElementById('lb-cap');
-    var lbClose=document.getElementById('lb-close');
-    document.querySelectorAll('.polaroid').forEach(function(card){
-      card.addEventListener('click',function(){
-        var img=card.querySelector('.pimg'),cap=card.getAttribute('data-cap');
-        if(lbImg&&img) lbImg.src=img.src;
-        if(lbCap) lbCap.textContent=cap||'';
-        if(lb) lb.classList.add('active');
-      });
-    });
-    function closeLb(){ if(lb) lb.classList.remove('active'); }
-    if(lbClose) lbClose.addEventListener('click',closeLb);
-    if(lb) lb.addEventListener('click',function(e){ if(e.target===lb) closeLb(); });
-    document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeLb(); });
   </script>
 </body>
 </html>
