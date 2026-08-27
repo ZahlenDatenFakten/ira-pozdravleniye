@@ -25,7 +25,7 @@
       --shr:   0 18px 45px rgba(92,26,46,.17), 0 0 26px rgba(216,140,154,.26);
       --rsm: 12px; --rmd: 20px; --rlg: 32px; --rf: 9999px;
       --ease: cubic-bezier(.23,1,.32,1);
-      --fd: 'Playfair Display',serif;
+      --fd: 'Cormorant Garamond',serif;
       --fs: 'Cormorant Garamond',serif;
       --fb: 'Nunito',sans-serif;
       --fsc: 'Caveat',cursive;
@@ -48,147 +48,78 @@
     #bg-tree-canvas.visible{opacity:1}
 
     /* ============================================================
-       LOCKED SCREEN — видно сразу, дерево на весь фон
+       LOCKED SCREEN — Midnight Cinema Aesthetic
     ============================================================ */
-    #locked-screen{
-      position:fixed;inset:0;z-index:9000;
-      display:flex;flex-direction:column;
-      align-items:center;justify-content:space-between;
-      overflow:hidden;
-      background:radial-gradient(ellipse at 50% 20%,#fff4f7 0%,#fff8f3 55%,#fdf0de 100%);
-      transition:opacity .85s var(--ease),transform .85s var(--ease);
+    #locked-screen {
+      position: fixed; inset: 0; z-index: 9000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: #050505; /* Deep black */
+      color: #F5F5F5;
+      transition: opacity 1.2s var(--ease), filter 1.2s var(--ease);
     }
-    #locked-screen.unlocking{opacity:0;transform:scale(1.04);pointer-events:none}
-
-    /* Дерево — абсолютный холст на весь locked-screen */
     #locked-tree-canvas{
       position:absolute;inset:0;
       width:100%;height:100%;
       display:block;z-index:0;
-      opacity:.78; /* полупрозрачное — просвечивает фон */
+      opacity:.8; 
     }
-
-    /* Градиент снизу для читаемости таймера */
-    #locked-screen::after{
-      content:'';
-      position:absolute;bottom:0;left:0;right:0;
-      height:52%;
-      background:linear-gradient(to top,
-        rgba(255,248,243,.97) 0%,
-        rgba(255,248,243,.65) 44%,
-        transparent 100%);
-      z-index:1;pointer-events:none;
+    #locked-screen::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(circle at center, transparent 0%, rgba(5,5,5,0.85) 100%);
+      z-index: 1; pointer-events:none;
     }
-    /* Градиент сверху — мягко скрывает начало дерева за шапкой */
-    #locked-screen::before{
-      content:'';
-      position:absolute;top:0;left:0;right:0;
-      height:28%;
-      background:linear-gradient(to bottom,
-        rgba(255,248,243,.88) 0%,
-        transparent 100%);
-      z-index:1;pointer-events:none;
+    .ls-top, .ls-bottom { position: relative; z-index: 2; }
+    #locked-screen.unlocking {
+      opacity: 0; filter: blur(12px); pointer-events: none;
     }
-
-    /* Контент поверх дерева */
-    .ls-top{
-      position:relative;z-index:2;
-      text-align:center;max-width:640px;width:100%;
-      padding:22px 18px 0;
+    .ls-top { text-align: center; margin-bottom: 12vh; padding: 0 20px; }
+    .ls-title { font-family: var(--fd); font-size: clamp(2.4rem, 8vw, 4.8rem); font-weight: 400; letter-spacing: 0.03em; margin: 16px 0; color: #FFFFFF; }
+    .ls-sub { font-family: var(--fb); font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: #666666; }
+    .ls-sub strong { color: #AAAAAA; font-weight: 400; }
+    
+    .ls-bottom { text-align: center; width: 100%; max-width: 800px; padding: 0 20px; }
+    .cd-grid { display: flex; justify-content: center; gap: clamp(18px, 5vw, 50px); margin-bottom: 70px; }
+    .cd-card { display: flex; flex-direction: column; align-items: center; }
+    .cd-val { font-family: var(--fd); font-size: clamp(3.2rem, 9vw, 6.5rem); font-weight: 400; color: #FFFFFF; line-height: 1; letter-spacing: -0.02em; }
+    .cd-lbl { font-family: var(--fb); font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: #444444; margin-top: 14px; }
+    
+    .ls-unlock-btn {
+      background: transparent; border: none; color: #333333; font-family: var(--fb);
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+      cursor: pointer; transition: color 0.5s var(--ease);
+      padding: 10px;
     }
-    .ls-badge{
-      display:inline-flex;align-items:center;gap:7px;
-      padding:5px 17px;
-      background:rgba(255,255,255,.88);
-      border:1px solid var(--rosel);border-radius:var(--rf);
-      font-size:.79rem;font-weight:700;color:var(--burg);
-      text-transform:uppercase;letter-spacing:.08em;
-      margin-bottom:8px;box-shadow:var(--sh);
-    }
-    .ls-title{
-      font-family:var(--fd);font-size:clamp(1.8rem,5vw,3rem);
-      color:var(--burg);margin-bottom:5px;
-    }
-    .ls-sub{font-size:clamp(.86rem,2vw,1.02rem);color:var(--muted);line-height:1.52}
-
-    /* Музыкальная подсказка */
-    .music-hint{
-      display:inline-flex;align-items:center;gap:6px;
-      margin-top:10px;
-      font-size:.8rem;color:var(--muted);
-      background:rgba(255,255,255,.78);
-      padding:4px 13px;border-radius:var(--rf);
-      border:1px dashed var(--rosel);
-    }
-    @keyframes note-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-    .music-note{display:inline-block;animation:note-pulse 1.8s ease-in-out infinite}
-
-    /* Таймер */
-    .ls-bottom{
-      position:relative;z-index:2;
-      width:100%;max-width:620px;
-      text-align:center;padding:0 16px 22px;
-    }
-    .cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(6px,1.8vw,13px);margin-bottom:13px}
-    .cd-card{
-      background:rgba(255,255,255,.90);
-      border:1.5px solid rgba(201,168,106,.38);
-      border-radius:var(--rmd);
-      padding:clamp(9px,1.9vw,14px) 4px;
-      box-shadow:0 6px 18px rgba(92,26,46,.08);
-      display:flex;flex-direction:column;align-items:center;
-      backdrop-filter:blur(8px);
-    }
-    .cd-val{font-family:var(--fd);font-size:clamp(1.7rem,4.3vw,2.7rem);font-weight:700;color:var(--burg);line-height:1}
-    .cd-lbl{font-size:clamp(.62rem,1.5vw,.76rem);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:2px}
-    .ls-unlock-btn{
-      background:rgba(255,255,255,.90);
-      border:1.5px dashed var(--rose);
-      color:var(--burg);font-family:var(--fb);
-      font-size:.86rem;font-weight:700;
-      padding:9px 20px;border-radius:var(--rf);
-      cursor:pointer;display:inline-flex;align-items:center;gap:7px;
-      box-shadow:var(--sh);transition:all .3s var(--ease);
-      backdrop-filter:blur(8px);
-    }
-    .ls-unlock-btn:hover{background:#fff;border-color:var(--burg);transform:scale(1.03)}
-
+    .ls-unlock-btn:hover { color: #888888; }
+    
     /* ============================================================
        МОДАЛКА ПАРОЛЯ
     ============================================================ */
-    #secret-modal{
-      position:fixed;inset:0;background:rgba(18,4,10,.83);
-      backdrop-filter:blur(14px);z-index:999999;
-      display:flex;align-items:center;justify-content:center;padding:20px;
-      opacity:0;pointer-events:none;transition:opacity .3s;
+    #secret-modal {
+      position: fixed; inset: 0; background: rgba(5,5,5,0.96); backdrop-filter: blur(10px);
+      z-index: 999999; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.5s var(--ease);
     }
-    #secret-modal.active{opacity:1;pointer-events:auto}
-    .modal-card{
-      background:#fff;border-radius:var(--rmd);padding:34px 26px 26px;
-      max-width:390px;width:100%;text-align:center;
-      box-shadow:0 28px 65px rgba(0,0,0,.46);border:2px solid var(--gold);
-      transform:scale(.9);transition:transform .32s var(--ease);
+    #secret-modal.active { opacity: 1; pointer-events: auto; }
+    .modal-card { text-align: center; width: 100%; max-width: 340px; padding: 40px; transform: translateY(20px); transition: transform 0.7s var(--ease); }
+    #secret-modal.active .modal-card { transform: translateY(0); }
+    .modal-title { font-family: var(--fd); font-size: 1.8rem; font-weight: 400; color: #FFFFFF; margin-bottom: 35px; letter-spacing: 0.05em; }
+    .modal-input {
+      width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid #222;
+      background: transparent; color: #FFF; font-size: 1.2rem; font-family: var(--fd);
+      text-align: center; outline: none; margin-bottom: 20px; letter-spacing: 0.25em;
+      transition: border-color 0.4s;
     }
-    #secret-modal.active .modal-card{transform:scale(1)}
-    .modal-icon{font-size:2.4rem;display:block;margin-bottom:9px}
-    .modal-title{font-family:var(--fd);font-size:1.4rem;color:var(--burg);margin-bottom:5px}
-    .modal-desc{font-size:.88rem;color:var(--muted);margin-bottom:17px;line-height:1.45}
-    .modal-input{
-      width:100%;padding:12px 14px;border:2px solid var(--rosel);
-      border-radius:var(--rsm);font-size:1.1rem;font-family:var(--fb);
-      text-align:center;outline:none;margin-bottom:11px;transition:border-color .2s;
+    .modal-input:focus { border-color: #666; }
+    .modal-input::placeholder { color: #1A1A1A; }
+    #pass-error { color: #8c2643; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 25px; display: none; }
+    .modal-submit {
+      width: 100%; background: #FFFFFF; color: #000000; border: none; padding: 16px;
+      font-family: var(--fb); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      cursor: pointer; margin-bottom: 15px; transition: background 0.4s, transform 0.4s var(--ease);
     }
-    .modal-input:focus{border-color:var(--burg);box-shadow:0 0 12px rgba(92,26,46,.2)}
-    #pass-error{color:#c0392b;font-size:.82rem;margin:-6px 0 9px;display:none}
-    .modal-submit{
-      width:100%;background:linear-gradient(135deg,var(--burg),#7e243e);color:#fff;
-      border:none;padding:12px 16px;border-radius:var(--rf);
-      font-size:.97rem;font-weight:700;cursor:pointer;margin-bottom:9px;
-      box-shadow:0 7px 16px rgba(92,26,46,.28);transition:transform .22s;
-    }
-    .modal-submit:hover{transform:translateY(-2px)}
-    .modal-cancel{background:transparent;border:none;color:var(--muted);font-size:.88rem;cursor:pointer}
-    .modal-cancel:hover{color:var(--burg)}
+    .modal-submit:hover { background: #E0E0E0; transform: scale(1.03); }
+    .modal-cancel { background: transparent; border: none; color: #444; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: color 0.4s; }
+    .modal-cancel:hover { color: #999; }
 
     /* ============================================================
        КНОПКА «НАЗАД К ТАЙМЕРУ»
@@ -224,7 +155,7 @@
     @keyframes fa{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
     .hero-aura{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:280px;height:280px;background:radial-gradient(circle,rgba(216,140,154,.28),rgba(201,168,106,.1) 50%,transparent 70%);border-radius:50%;filter:blur(32px);z-index:-1;pointer-events:none;animation:fa 6s ease-in-out alternate infinite}
     .hero-title{font-size:clamp(2.2rem,7vw,4.4rem);color:var(--burg);letter-spacing:-.02em;margin-bottom:10px}
-    .hero-title .hl{background:linear-gradient(135deg,var(--burg),#8c2643,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero-title .hl{background:linear-gradient(135deg,var(--burg),#8c2643,var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
     .hero-age{font-family:var(--fs);font-size:clamp(1.2rem,3vw,1.85rem);font-style:italic;color:var(--gold);margin-bottom:13px;font-weight:600}
     .hero-sub{max-width:565px;font-size:clamp(.96rem,2.2vw,1.12rem);color:var(--muted);margin:0 auto 28px}
     .hero-cta{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--burg),#7e243e);color:var(--cream);font-weight:600;font-size:.98rem;padding:12px 28px;border-radius:var(--rf);text-decoration:none;box-shadow:0 8px 20px rgba(92,26,46,.27);transition:all .3s var(--ease)}
@@ -402,44 +333,26 @@
 </head>
 <body>
 
-  <!-- АУДИО — файл music.mp3 в папке проекта -->
-  <audio id="bg-audio" src="music.mp3" loop preload="auto"></audio>
-
   <!-- Фоновые лепестки -->
   <canvas id="petals-canvas"></canvas>
 
   <!-- Фоновое дерево поздравления -->
   <canvas id="bg-tree-canvas"></canvas>
 
-  <!-- ПЛЕЕР -->
-  <div id="player-widget" title="Музыка">
-    <button class="pw-btn" id="pw-btn" aria-label="Воспроизвести / Пауза"><span id="pw-icon">▶</span></button>
-    <div class="pw-info"><span class="pw-title">Так красиво</span><span class="pw-artist">Сергей Лазарев</span></div>
-    <div class="pw-eq"><div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div><div class="eq-b"></div></div>
-  </div>
-
   <!-- КНОПКА НАЗАД -->
   <button id="back-btn" onclick="goBackToTimer()">← К таймеру</button>
 
   <!-- ============================================================
-       LOCKED SCREEN — показывается сразу
+       LOCKED SCREEN — Midnight Cinema
   ============================================================ -->
   <div id="locked-screen">
-
-    <!-- Дерево на весь фон -->
+    <!-- Масштабное дерево на фон -->
     <canvas id="locked-tree-canvas"></canvas>
 
     <div class="ls-top">
-      <div class="ls-badge">✨ Секретный сюрприз для Иры ✨</div>
-      <h1 class="ls-title">Шкатулка воспоминаний</h1>
-      <p class="ls-sub">
-        Моя любимая Ирочка! Этот сюрприз откроется ровно в твой<br>
-        21-й день рождения — <strong>19 сентября 2026 в полночь ✨</strong>
-      </p>
-      <div class="music-hint">
-        <span class="music-note">🎵</span>
-        Нажмите в любом месте экрана, чтобы включить музыку
-      </div>
+      <div class="ls-sub">Секретный сюрприз</div>
+      <h1 class="ls-title">Воспоминания</h1>
+      <div class="ls-sub">Откроется <strong>19 сентября 2026</strong></div>
     </div>
 
     <div class="ls-bottom">
@@ -449,20 +362,18 @@
         <div class="cd-card"><span class="cd-val" id="cd-m">00</span><span class="cd-lbl">Минут</span></div>
         <div class="cd-card"><span class="cd-val" id="cd-s">00</span><span class="cd-lbl">Секунд</span></div>
       </div>
-      <button class="ls-unlock-btn" onclick="openSecretPrompt()">🔐 Режим мужа — ввести ключ</button>
+      <button class="ls-unlock-btn" onclick="event.stopPropagation(); openSecretPrompt()">Ввести ключ</button>
     </div>
   </div>
 
   <!-- МОДАЛКА -->
   <div id="secret-modal">
     <div class="modal-card">
-      <span class="modal-icon">🔐</span>
-      <h3 class="modal-title">Доступ для мужа</h3>
-      <p class="modal-desc">Введите секретный ключ, чтобы открыть сайт досрочно</p>
-      <input type="password" class="modal-input" id="pass-input" placeholder="••••" autocomplete="off"
+      <h3 class="modal-title">Авторизация</h3>
+      <input type="password" class="modal-input" id="pass-input" placeholder="КЛЮЧ" autocomplete="off"
         onkeydown="if(event.key==='Enter') submitSecretCode()">
-      <div id="pass-error">Неверный ключ. Попробуйте ещё раз.</div>
-      <button class="modal-submit" onclick="submitSecretCode()">Открыть подарок ❤️</button>
+      <div id="pass-error">В доступе отказано</div>
+      <button class="modal-submit" onclick="submitSecretCode()">Войти</button>
       <button class="modal-cancel" onclick="closeSecretModal()">Отмена</button>
     </div>
   </div>
@@ -661,7 +572,7 @@
       var t=0, progress=0, running=false;
 
       var cfg = mode === 'locked'
-        ? { trunkH:.38, maxD:5, lMin:4, lMax:8, speed:.0045, fallRate:.28, strokeAlpha:.9  }
+        ? { trunkH:.55, maxD:6, lMin:6, lMax:12, speed:.0020, fallRate:.35, strokeAlpha:.9  }
         : { trunkH:.40, maxD:6, lMin:5, lMax:10, speed:.0030, fallRate:.18, strokeAlpha:.75 };
 
       function measure(){
@@ -712,7 +623,7 @@
             if(Math.random()>.32) brnch(x2,y2,len*.63,angle+(Math.random()-.5)*.32,width*.62,depth+1,delay+.10);
           }
         }
-        brnch(W*.5, H*.965, tLen, 0, mode==='locked'?16:18, 1, 0);
+        brnch(W*.5, H*1.02, tLen, 0, mode==='locked'?24:18, 1, 0);
       }
 
       function drawHeart(x,y,size,color,rot,alpha){
