@@ -156,10 +156,15 @@
     .ls-sub strong { color: var(--gold); font-weight: 700; }
     
     .ls-bottom { text-align: center; width: 100%; max-width: 800px; padding: 0 20px; }
-    .cd-grid { display: flex; justify-content: center; gap: clamp(18px, 5vw, 50px); margin-bottom: 70px; }
+    .cd-grid { 
+      display: inline-flex; justify-content: center; gap: clamp(16px, 4vw, 45px); margin-bottom: 50px;
+      background: rgba(255, 253, 250, 0.75); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      padding: clamp(24px, 5vw, 32px) clamp(24px, 6vw, 48px); border-radius: 32px;
+      border: 1px solid rgba(216, 140, 154, 0.5); box-shadow: 0 16px 40px rgba(92, 26, 46, 0.12), inset 0 0 20px rgba(255,255,255,0.5);
+    }
     .cd-card { display: flex; flex-direction: column; align-items: center; }
-    .cd-val { font-family: var(--fd); font-size: clamp(3.2rem, 9vw, 6.5rem); font-weight: 600; color: var(--burg); line-height: 1; letter-spacing: -0.02em; }
-    .cd-lbl { font-family: var(--fb); font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); margin-top: 14px; font-weight: 600; }
+    .cd-val { font-family: var(--fd); font-size: clamp(2.8rem, 8vw, 6rem); font-weight: 600; color: var(--burg); line-height: 1; letter-spacing: -0.02em; }
+    .cd-lbl { font-family: var(--fb); font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--deep); margin-top: 14px; font-weight: 800; }
     
     .ls-unlock-btn {
       display: inline-flex; align-items: center; justify-content: center;
