@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>С 21-летием, любимая Ирочка! ❤️ — Книга Любви</title>
+  <title>С 21-летием, любимая Ирочка! 🎧❤️</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,7 +52,7 @@
     }
     .bg-overlay{
       position:absolute;inset:0;
-      background:radial-gradient(circle at center, rgba(255,248,243,.62) 0%, rgba(255,245,240,.78) 100%);
+      background:radial-gradient(circle at center, rgba(255,248,243,.65) 0%, rgba(255,245,240,.82) 100%);
       backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
       z-index:1;
     }
@@ -119,7 +119,6 @@
       transition: opacity 1.2s var(--ease), filter 1.2s var(--ease);
       overflow: hidden;
     }
-    /* Фоновое масштабное Дерево-Сердце */
     .ls-tree-bg {
       position: absolute; inset: 0;
       background: url('assets/tree_grand.jpg') center center / cover no-repeat;
@@ -139,7 +138,6 @@
       display:block;z-index:2;pointer-events:none;
     }
 
-    /* Анимации появления */
     .cinematic-hidden { opacity: 0; transform: translateY(28px); }
     .cinematic-reveal { opacity: 1; transform: translateY(0); transition: opacity 1.4s cubic-bezier(0.23,1,0.32,1), transform 1.4s cubic-bezier(0.23,1,0.32,1); }
     .char-hidden { opacity: 0; transform: translateY(16px) scale(0.9); display: inline-block; }
@@ -206,7 +204,7 @@
       transform: scale(0.92) translateY(20px); transition: transform 0.6s var(--ease);
     }
     #secret-modal.active .modal-card { transform: scale(1) translateY(0); }
-    .modal-title { font-family: var(--fd); font-size: 1.9rem; font-weight: 700; color: var(--burg); margin-bottom: 24px; }
+    .modal-title { font-family: var(--fd); font-size: 1.8rem; font-weight: 700; color: var(--burg); margin-bottom: 20px; }
     .modal-input {
       width: 100%; padding: 12px 14px; border: 1.5px solid var(--rose); border-radius: var(--rmd);
       background: #FFF; color: var(--burg); font-size: 1.15rem; font-family: var(--fb); font-weight: 600;
@@ -225,7 +223,7 @@
     .modal-cancel:hover { color: var(--burg); }
 
     /* ============================================================
-       ИНТЕРАКТИВНАЯ КНИГА (21 СТРАНИЦА)
+       РЕАЛИСТИЧНАЯ 3D КНИГА (DRAG-AND-FLIP ПЕРЕЛИСТЫВАНИЕ)
     ============================================================ */
     #book-app {
       display: none; position: fixed; inset: 0; z-index: 50;
@@ -238,66 +236,82 @@
     .book-top-bar {
       position: absolute; top: 16px;
       display: flex; align-items: center; justify-content: center; gap: 14px;
-      background: rgba(255,255,255,0.9); border: 1px solid var(--rosel);
-      padding: 6px 20px; border-radius: var(--rf); box-shadow: var(--sh);
+      background: rgba(255,255,255,0.92); border: 1px solid var(--rosel);
+      padding: 6px 22px; border-radius: var(--rf); box-shadow: var(--sh);
       backdrop-filter: blur(10px); z-index: 100;
     }
     .book-chapter-title {
       font-family: var(--fb); font-size: 0.78rem; font-weight: 700;
-      letter-spacing: 0.18em; text-transform: uppercase; color: var(--burg);
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--burg);
     }
     .book-indicator {
-      font-family: var(--fd); font-size: 1.15rem; font-weight: 700;
+      font-family: var(--fd); font-size: 1.18rem; font-weight: 700;
       color: var(--gold);
     }
 
-    /* Сцена книги */
+    /* 3D Сцена */
     .book-stage {
       position: relative;
       width: clamp(320px, 90vw, 920px);
       height: clamp(520px, 80vh, 720px);
-      perspective: 1800px;
+      perspective: 2400px;
       display: flex; align-items: center; justify-content: center;
+      cursor: grab;
     }
+    .book-stage.dragging { cursor: grabbing; }
 
-    /* Раскрытый разворот книги */
+    /* Обложка и основа книги */
     .book-wrap {
       position: relative; width: 100%; height: 100%;
-      background: linear-gradient(135deg, #FFFDFB 0%, #FAF2EE 100%);
+      background: linear-gradient(135deg, #FAF2EC 0%, #FFFDFB 50%, #F5EAE4 100%);
       border-radius: var(--rlg);
       box-shadow: 0 25px 65px rgba(92,26,46,0.22), 0 0 0 1px rgba(201,168,106,0.45);
       border: 6px solid #FFF;
-      overflow: hidden; display: flex; flex-direction: column;
+      overflow: hidden;
+      transform-style: preserve-3d;
     }
-    /* Текстура корешка посередине */
-    .book-wrap::before {
-      content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
-      background: linear-gradient(180deg, transparent, rgba(201,168,106,0.3), transparent);
-      box-shadow: 0 0 18px rgba(92,26,46,0.08); pointer-events: none; z-index: 5;
+    /* Корешок по центру */
+    .book-spine {
+      position: absolute; top: 0; bottom: 0; left: 50%; width: 3px;
+      background: linear-gradient(180deg, transparent, rgba(201,168,106,0.4), transparent);
+      box-shadow: 0 0 20px rgba(92,26,46,0.12); pointer-events: none; z-index: 50;
     }
 
-    /* Страницы */
-    .book-pages-container {
-      position: relative; width: 100%; height: 100%; overflow: hidden;
+    /* Листы книги с 3D поворотом */
+    .book-sheets {
+      position: relative; width: 100%; height: 100%;
+      transform-style: preserve-3d;
     }
-    .book-page {
-      position: absolute; inset: 0; padding: clamp(24px, 5vw, 56px);
+    .book-sheet {
+      position: absolute; inset: 0;
+      transform-style: preserve-3d;
+      transform-origin: left center;
+      transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.65s ease;
+      will-change: transform;
+    }
+    .book-sheet.flipped {
+      transform: rotateY(-180deg);
+      pointer-events: none;
+    }
+
+    /* Страница (лицевая и обратная) */
+    .sheet-card {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #FFFDFB 0%, #FAF2EE 100%);
+      padding: clamp(24px, 5vw, 56px);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; opacity: 0; pointer-events: none;
-      transform: scale(0.94) translateY(30px);
-      transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+      text-align: center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       overflow-y: auto; -webkit-overflow-scrolling: touch;
     }
-    .book-page.active {
-      opacity: 1; pointer-events: auto;
-      transform: scale(1) translateY(0);
-      z-index: 10;
-    }
-    .book-page.prev {
-      opacity: 0; transform: scale(0.94) translateY(-30px);
+    .sheet-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(0,0,0,0.06) 0%, transparent 10%, transparent 90%, rgba(0,0,0,0.03) 100%);
+      pointer-events: none;
     }
 
-    /* Элементы внутри страницы книги */
+    /* Элементы внутри страницы */
     .page-num {
       position: absolute; bottom: 18px;
       font-family: var(--fd); font-size: 1rem; color: var(--gold); font-weight: 700;
@@ -330,7 +344,6 @@
       margin-top: 18px; font-family: var(--fsc); font-size: 1.4rem; color: var(--burg);
     }
 
-    /* Специальные блоки страниц */
     .cover-seal {
       width: 70px; height: 70px; border-radius: 50%;
       background: radial-gradient(circle, #8C2643, var(--deep));
@@ -362,7 +375,14 @@
     .wish-banner.active { display: block; animation: popWish 0.5s var(--ease); }
     @keyframes popWish { 0%{opacity:0;transform:scale(0.9)} 100%{opacity:1;transform:scale(1)} }
 
-    /* Нижняя панель навигации книги */
+    /* Подсказка жеста */
+    .drag-hint {
+      position: absolute; bottom: 68px; font-family: var(--fb); font-size: 0.72rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
+      opacity: 0.8; display: flex; align-items: center; gap: 6px; pointer-events: none;
+    }
+
+    /* Нижняя навигация */
     .book-bottom-nav {
       position: absolute; bottom: 16px;
       display: flex; align-items: center; gap: 16px; z-index: 100;
@@ -377,7 +397,6 @@
     .nav-btn:hover { background: #FFF; border-color: var(--burg); transform: scale(1.08); box-shadow: var(--shr); }
     .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
-    /* Полоса прогресса */
     .book-progress {
       width: clamp(140px, 30vw, 260px); height: 6px;
       background: rgba(216,140,154,0.3); border-radius: 3px; overflow: hidden;
@@ -387,25 +406,18 @@
       border-radius: 3px; transition: width 0.4s var(--ease);
     }
 
-    /* Подсказка колесика */
-    .scroll-flick-hint {
-      position: absolute; bottom: 65px; font-family: var(--fb); font-size: 0.72rem;
-      letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
-      opacity: 0.75; display: flex; align-items: center; gap: 6px; pointer-events: none;
-    }
-
     @media (max-width: 768px) {
       .book-stage { width: 94vw; height: 84vh; }
       .book-wrap { border-width: 3px; }
       .page-heading { font-size: 1.6rem; }
       .page-body { font-size: 1.05rem; }
-      .scroll-flick-hint { display: none; }
+      .drag-hint { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- АУДИО — МУЗЫКА НА РЕПИТЕ (loop) -->
+  <!-- АУДИО — МУЗЫКА НА РЕПИТЕ (loop) БЕЗ ЛИШНИХ ЗВУКОВ -->
   <audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
   <audio id="sfx-writing" src="sfx_writing.mp3" preload="auto"></audio>
   <audio id="sfx-reveal" src="sfx_reveal.mp3" preload="auto"></audio>
@@ -466,7 +478,7 @@
   <!-- МОДАЛКА ПАРОЛЯ -->
   <div id="secret-modal">
     <div class="modal-card">
-      <h3 class="modal-title">Вход для любимого мужа</h3>
+      <h3 class="modal-title">Вход для любимого</h3>
       <input type="password" class="modal-input" id="pass-input" placeholder="Введите ключ" autocomplete="off"
         onkeydown="if(event.key==='Enter') submitSecretCode()">
       <div id="pass-error">Неверный ключ доступа</div>
@@ -476,9 +488,9 @@
   </div>
 
   <!-- ============================================================
-       ИНТЕРАКТИВНАЯ КНИГА: 21 СТРАНИЦА О ЛЮБВИ
+       РЕАЛИСТИЧНАЯ 3D КНИГА: 21 ГЛАВА (ПЕРЕТАСКИВАНИЕ МЫШЬЮ)
   ============================================================ -->
-  <main id="book-app" aria-label="Интерактивная книга поздравлений">
+  <main id="book-app" aria-label="Интерактивная 3D книга поздравлений">
     
     <!-- Верхняя панель -->
     <div class="book-top-bar">
@@ -487,301 +499,344 @@
     </div>
 
     <!-- Сцена книги -->
-    <div class="book-stage">
+    <div class="book-stage" id="book-stage">
       <div class="book-wrap">
-        <div class="book-pages-container" id="pages-container">
+        <div class="book-spine"></div>
+        <div class="book-sheets" id="book-sheets">
 
           <!-- 1. ОБЛОЖКА -->
-          <section class="book-page active" data-chapter="Обложка">
-            <div class="cover-seal">И</div>
-            <div class="page-tag">Посвящается любимой жене</div>
-            <h1 class="page-heading">21 глава<br>нашей бесконечной любви</h1>
-            <div class="page-body">
-              <p>В день твоего 21-летия эта книга создана только для тебя. Каждая её страница — это частичка моего сердца, благодарность за наше счастье и признание в вечной любви.</p>
-            </div>
-            <button class="page-cta-btn" onclick="flipPage(1)">Начать чтение ✨</button>
-            <div class="page-num">~ Обложка ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 21;">
+            <section class="sheet-card" data-chapter="Обложка">
+              <div class="cover-seal">И</div>
+              <div class="page-tag">Посвящается любимой Ирочке</div>
+              <h1 class="page-heading">21 глава<br>о голосе, который изменил всё</h1>
+              <div class="page-body">
+                <p>В день твоего 21-летия эта книга создана только для тебя. Каждая страница — это благодарность за наши ночные разговоры, сотни часов в играх и тепло, которое ты даришь сквозь любые расстояния.</p>
+              </div>
+              <button class="page-cta-btn" onclick="flipPageDirect(1)">Перевернуть страницу ➔</button>
+              <div class="page-num">~ Обложка ~</div>
+            </section>
+          </div>
 
           <!-- 2. ГЛАВА 1 -->
-          <section class="book-page" data-chapter="Глава 1">
-            <div class="page-icon">🌸</div>
-            <div class="page-tag">Глава I</div>
-            <h2 class="page-heading">День, когда мир стал ярче</h2>
-            <div class="page-body">
-              <p>Ровно 21 год назад в этот мир пришла ты — моё главное чудо, мой свет и вдохновение. Твоё появление на свет сделало эту планету добрее, красивее и теплее.</p>
-              <p>Я бесконечно благодарен этому дню за то, что он подарил мне <span class="page-hl">самого дорогого человека во Вселенной</span>.</p>
-            </div>
-            <div class="page-num">~ Страница 2 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 20;">
+            <section class="sheet-card" data-chapter="Глава 1">
+              <div class="page-icon">🌸</div>
+              <div class="page-tag">Глава I</div>
+              <h2 class="page-heading">День, когда ты родилась</h2>
+              <div class="page-body">
+                <p>Ровно 21 год назад в этот мир пришла ты — девушка, чей голос однажды перевернет мою жизнь и наполнит её настоящим смыслом.</p>
+                <p>Я бесконечно благодарен этому дню за то, что на свете есть <span class="page-hl">самый родной для меня человек</span>.</p>
+              </div>
+              <div class="page-num">~ Страница 2 ~</div>
+            </section>
+          </div>
 
           <!-- 3. ГЛАВА 2 -->
-          <section class="book-page" data-chapter="Глава 2">
-            <div class="page-icon">✨</div>
-            <div class="page-tag">Глава II</div>
-            <h2 class="page-heading">Твоя лучезарная улыбка</h2>
-            <div class="page-body">
-              <p>Когда ты улыбаешься, в моем сердце мгновенно наступает весна. Твоя улыбка способна разогнать любые тучи, согреть в самый ненастный день и наполнить дом абсолютным уютом.</p>
-              <div class="page-ps">«Твоя улыбка — моё персональное солнце.» ❤️</div>
-            </div>
-            <div class="page-num">~ Страница 3 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 19;">
+            <section class="sheet-card" data-chapter="Глава 2">
+              <div class="page-icon">🎧</div>
+              <div class="page-tag">Глава II</div>
+              <h2 class="page-heading">Твой голос в наушниках</h2>
+              <div class="page-body">
+                <p>Твой голос — моё самое любимое и уютное звучание на свете. Стоит мне надеть наушники и услышать твоё «Привет», как любая тревога и тяжесть дня мгновенно отступают.</p>
+                <div class="page-ps">«Твой голос лечит душу лучше любых лекарств.» ❤️</div>
+              </div>
+              <div class="page-num">~ Страница 3 ~</div>
+            </section>
+          </div>
 
           <!-- 4. ГЛАВА 3 -->
-          <section class="book-page" data-chapter="Глава 3">
-            <div class="page-icon">💎</div>
-            <div class="page-tag">Глава III</div>
-            <h2 class="page-heading">Чистота твоего сердца</h2>
-            <div class="page-body">
-              <p>В твоей душе живёт невероятная искренность и глубина. Ты умеешь чувствовать так тонко, сопереживать так искренне и любить так преданно, как не умеет никто другой.</p>
-              <p>Твоё доброе сердце — это сокровище, которое я оберегаю превыше всего на свете.</p>
-            </div>
-            <div class="page-num">~ Страница 4 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 18;">
+            <section class="sheet-card" data-chapter="Глава 3">
+              <div class="page-icon">🎮</div>
+              <div class="page-tag">Глава III</div>
+              <h2 class="page-heading">Наши бессонные ночи и игры</h2>
+              <div class="page-body">
+                <p>Сотни часов совместных каток, побед, смешных сливов и разговоров до 4–5 утра, когда за окном уже светает, а спать не хочется совсем — ведь ты рядом в войсе.</p>
+                <p>Эти ночи для меня — самые ценные и тёплые воспоминания.</p>
+              </div>
+              <div class="page-num">~ Страница 4 ~</div>
+            </section>
+          </div>
 
           <!-- 5. ГЛАВА 4 -->
-          <section class="book-page" data-chapter="Глава 4">
-            <div class="page-icon">💫</div>
-            <div class="page-tag">Глава IV</div>
-            <h2 class="page-heading">Звук твоего смеха</h2>
-            <div class="page-body">
-              <p>Твой звонкий, искренний смех — самая прекрасная музыка во Вселенной. Когда ты счастлива и смеёшься от души, всё вокруг обретает смысл и радость.</p>
-              <p>Я готов каждый день делать всё возможное, чтобы ты как можно чаще смеялась и сияла.</p>
-            </div>
-            <div class="page-num">~ Страница 5 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 17;">
+            <section class="sheet-card" data-chapter="Глава 4">
+              <div class="page-icon">💫</div>
+              <div class="page-tag">Глава IV</div>
+              <h2 class="page-heading">Звук твоего смеха</h2>
+              <div class="page-body">
+                <p>Когда ты искренне смеёшься в микрофон — это чистая магия. Твой звонкий смех заразителен, он делает даже самый обычный вечер праздником.</p>
+                <p>Я готов шутить и выдумывать глупости бесконечно, лишь бы снова услышать, как ты смеешься.</p>
+              </div>
+              <div class="page-num">~ Страница 5 ~</div>
+            </section>
+          </div>
 
           <!-- 6. ГЛАВА 5 -->
-          <section class="book-page" data-chapter="Глава 5">
-            <div class="page-icon">🕊️</div>
-            <div class="page-tag">Глава V</div>
-            <h2 class="page-heading">Нежность твоих объятий</h2>
-            <div class="page-body">
-              <p>Твои тёплые руки и ласковые объятия — это место, где я обретаю абсолютный покой. В твоих руках растворяются любые тревоги и усталость тяжелого дня.</p>
-              <p>Рядом с тобой мир замирает, и остаёмся только мы двое.</p>
-            </div>
-            <div class="page-num">~ Страница 6 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 16;">
+            <section class="sheet-card" data-chapter="Глава 5">
+              <div class="page-icon">💎</div>
+              <div class="page-tag">Глава V</div>
+              <h2 class="page-heading">Искренность твоей души</h2>
+              <div class="page-body">
+                <p>Я полюбил не картинку, а твою настоящую, живую душу. Твою честность, отзывчивость, доброе сердце и способность чувствовать так глубоко и искренне.</p>
+                <p>В мире интернета встретить такого чистого человека — невероятное чудо.</p>
+              </div>
+              <div class="page-num">~ Страница 6 ~</div>
+            </section>
+          </div>
 
           <!-- 7. ГЛАВА 6 -->
-          <section class="book-page" data-chapter="Глава 6">
-            <div class="page-icon">👁️‍🗨️</div>
-            <div class="page-tag">Глава VI</div>
-            <h2 class="page-heading">Сияние твоих глаз</h2>
-            <div class="page-body">
-              <p>В твоих глазах — целая вселенная, полная нежности, загадки и тепла. Каждый раз, когда я ловлю твой влюбленный взгляд, моё сердце бьётся так же трепетно, как в первый день.</p>
-              <div class="page-ps">«Твой взгляд — моё самое любимое отражение.» 🌹</div>
-            </div>
-            <div class="page-num">~ Страница 7 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 15;">
+            <section class="sheet-card" data-chapter="Глава 6">
+              <div class="page-icon">✨</div>
+              <div class="page-tag">Глава VI</div>
+              <h2 class="page-heading">Твоё чувство юмора</h2>
+              <div class="page-body">
+                <p>Твои подколы, реакции в напряженных моментах игр, наши локальные мемы и шутки, понятные только нам двоим. С тобой так легко и свободно быть самим собой.</p>
+                <div class="page-ps">«С тобой никогда не бывает скучно.» 🌸</div>
+              </div>
+              <div class="page-num">~ Страница 7 ~</div>
+            </section>
+          </div>
 
           <!-- 8. ГЛАВА 7 -->
-          <section class="book-page" data-chapter="Глава 7">
-            <div class="page-icon">🌟</div>
-            <div class="page-tag">Глава VII</div>
-            <h2 class="page-heading">Моё главное вдохновение</h2>
-            <div class="page-body">
-              <p>Твоя вера в меня окрыляет. С тобой я чувствую себя способным свернуть горы и достичь любых вершин. Ты делаешь меня сильнее, мудрее и счастливее каждым своим словом поддержки.</p>
-            </div>
-            <div class="page-num">~ Страница 8 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 14;">
+            <section class="sheet-card" data-chapter="Глава 7">
+              <div class="page-icon">🛡️</div>
+              <div class="page-tag">Глава VII</div>
+              <h2 class="page-heading">Моя главная поддержка</h2>
+              <div class="page-body">
+                <p>Когда мне бывает трудно, именно твои слова возвращают веру в себя. То, как внимательно ты умеешь выслушать и найти правильные, добрые слова — даёт мне огромные силы.</p>
+              </div>
+              <div class="page-num">~ Страница 8 ~</div>
+            </section>
+          </div>
 
           <!-- 9. ГЛАВА 8 -->
-          <section class="book-page" data-chapter="Глава 8">
-            <div class="page-icon">🏡</div>
-            <div class="page-tag">Глава VIII</div>
-            <h2 class="page-heading">Уют нашего дома</h2>
-            <div class="page-body">
-              <p>Ты обладаешь удивительным даром наполнять любое пространство уютом, гармонией и душевным теплом. Дом там, где ты. Куда бы мы ни отправились, рядом с тобой я дома.</p>
+          <section class="book-sheet" style="z-index: 13;">
+            <div class="sheet-card" data-chapter="Глава 8">
+              <div class="page-icon">🌐</div>
+              <div class="page-tag">Глава VIII</div>
+              <h2 class="page-heading">Уют на расстоянии</h2>
+              <div class="page-body">
+                <p>Километры и экраны бессильны. Через тысячи километров ты стала мне ближе и роднее, чем кто-либо рядом. Наша связь сильнее любых расстояний.</p>
+              </div>
+              <div class="page-num">~ Страница 9 ~</div>
             </div>
-            <div class="page-num">~ Страница 9 ~</div>
           </section>
 
           <!-- 10. ГЛАВА 9 -->
-          <section class="book-page" data-chapter="Глава 9">
-            <div class="page-icon">💍</div>
-            <div class="page-tag">Глава IX</div>
-            <h2 class="page-heading">Судьбоносная встреча</h2>
-            <div class="page-body">
-              <p>День, когда наши судьбы соединились, разделил мою жизнь на «до» и «настоящее счастье». Ты — лучшее, что когда-либо происходило в моей жизни, и я благодарен Богу за тебя каждую секунду.</p>
-            </div>
-            <div class="page-num">~ Страница 10 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 12;">
+            <section class="sheet-card" data-chapter="Глава 9">
+              <div class="page-icon">🎙️</div>
+              <div class="page-tag">Глава IX</div>
+              <h2 class="page-heading">Тот самый первый день</h2>
+              <div class="page-body">
+                <p>Случайный заход в один канал, первая совместная игра, первые фразы... Тогда я даже не подозревал, что этот случайный день станет началом самого прекрасного чувства в моей жизни.</p>
+              </div>
+              <div class="page-num">~ Страница 10 ~</div>
+            </section>
+          </div>
 
           <!-- 11. ГЛАВА 10 -->
-          <section class="book-page" data-chapter="Глава 10">
-            <div class="page-icon">☕</div>
-            <div class="page-tag">Глава X</div>
-            <h2 class="page-heading">Магия простых мгновений</h2>
-            <div class="page-body">
-              <p>Утренний кофе, разговоры допоздна, прогулки за руку и даже простое молчание рядом с тобой — это бесценные мгновения, которые я бережно храню в памяти, как самые яркие сокровища.</p>
-            </div>
-            <div class="page-num">~ Страница 11 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 11;">
+            <section class="sheet-card" data-chapter="Глава 10">
+              <div class="page-icon">🌊</div>
+              <div class="page-tag">Глава X</div>
+              <h2 class="page-heading">На одной волне</h2>
+              <div class="page-body">
+                <p>Особое счастье — когда вы думаете об одном и том же, одновременно говорите одну фразу и чувствуете настроение друг друга даже по интонации голоса.</p>
+              </div>
+              <div class="page-num">~ Страница 11 ~</div>
+            </section>
+          </div>
 
           <!-- 12. ГЛАВА 11 -->
-          <section class="book-page" data-chapter="Глава 11">
-            <div class="page-icon">👑</div>
-            <div class="page-tag">Глава XI</div>
-            <h2 class="page-heading">Мудрость и грация</h2>
-            <div class="page-body">
-              <p>В свои 21 год ты сочетаешь в себе потрясающую женскую мудрость, рассудительность, утонченное чувство прекрасного и королевскую грацию. Я горжусь тем, какая ты особенная.</p>
-            </div>
-            <div class="page-num">~ Страница 12 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 10;">
+            <section class="sheet-card" data-chapter="Глава 11">
+              <div class="page-icon">👑</div>
+              <div class="page-tag">Глава XI</div>
+              <h2 class="page-heading">Твой характер и мудрость</h2>
+              <div class="page-body">
+                <p>В свои 21 год ты удивительно рассудительна, честна и принципиальна. Я искренне восхищаюсь твоей целеустремленностью и сильным, но в то же время нежным характером.</p>
+              </div>
+              <div class="page-num">~ Страница 12 ~</div>
+            </section>
+          </div>
 
           <!-- 13. ГЛАВА 12 -->
-          <section class="book-page" data-chapter="Глава 12">
-            <div class="page-icon">⚓</div>
-            <div class="page-tag">Глава XII</div>
-            <h2 class="page-heading">Тихая гавань</h2>
-            <div class="page-body">
-              <p>В мире постоянной суеты и перемен ты — моя тихая, спокойная гавань. Рядом с тобой я обретаю равновесие, уверенность и глубокий душевный мир.</p>
-            </div>
-            <div class="page-num">~ Страница 13 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 9;">
+            <section class="sheet-card" data-chapter="Глава 12">
+              <div class="page-icon">💬</div>
+              <div class="page-tag">Глава XII</div>
+              <h2 class="page-heading">Ожидание твоих сообщений</h2>
+              <div class="page-body">
+                <p>Звук уведомления от тебя всегда заставляет моё сердце биться быстрее. Каждый день начинается с мыслей о тебе и ожидания, когда мы снова сможем созвониться.</p>
+              </div>
+              <div class="page-num">~ Страница 13 ~</div>
+            </section>
+          </div>
 
           <!-- 14. ГЛАВА 13 -->
-          <section class="book-page" data-chapter="Глава 13">
-            <div class="page-icon">🌷</div>
-            <div class="page-tag">Глава XIII</div>
-            <h2 class="page-heading">Твоя забота</h2>
-            <div class="page-body">
-              <p>Внимание к каждой мелочи, нежный утренний поцелуй, вкусный чай и твой ласковый вопрос: «Как ты себя чувствуешь?» — в этой трогательной заботе проявляется твоя безграничная любовь.</p>
-            </div>
-            <div class="page-num">~ Страница 14 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 8;">
+            <section class="sheet-card" data-chapter="Глава 13">
+              <div class="page-icon">🌙</div>
+              <div class="page-tag">Глава XIII</div>
+              <h2 class="page-heading">Магия присутствия</h2>
+              <div class="page-body">
+                <p>Даже когда мы просто сидим в муте и каждый занимается своими делами — само ощущение того, что ты на связи, дарит невероятный покой и тепло.</p>
+              </div>
+              <div class="page-num">~ Страница 14 ~</div>
+            </section>
+          </div>
 
           <!-- 15. ГЛАВА 14 -->
-          <section class="book-page" data-chapter="Глава 14">
-            <div class="page-icon">🚀</div>
-            <div class="page-tag">Глава XIV</div>
-            <h2 class="page-heading">Наши мечты</h2>
-            <div class="page-body">
-              <p>Все мои планы и мечты о будущем неразрывно связаны с тобой. Мы построим удивительную, яркую, наполненную путешествиями и любовью жизнь, рука об руку.</p>
-            </div>
-            <div class="page-num">~ Страница 15 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 7;">
+            <section class="sheet-card" data-chapter="Глава 14">
+              <div class="page-icon">✈️</div>
+              <div class="page-tag">Глава XIV</div>
+              <h2 class="page-heading">Мечта о нашей встрече</h2>
+              <div class="page-body">
+                <p>Я всем сердцем мечтаю о дне, когда смогу увидеть тебя вживую, впервые услышать твой голос без микрофона, взглянуть в твои глаза и крепко обнять в реальности.</p>
+              </div>
+              <div class="page-num">~ Страница 15 ~</div>
+            </section>
+          </div>
 
           <!-- 16. ГЛАВА 15 -->
-          <section class="book-page" data-chapter="Глава 15">
-            <div class="page-icon">💄</div>
-            <div class="page-tag">Глава XV</div>
-            <h2 class="page-heading">Твоя красота</h2>
-            <div class="page-body">
-              <p>21 год — возраст невероятного расцвета. Твоя природная красота, нежные черты лица и сияющая улыбка восхищают меня с каждым днём всё сильнее. Ты для меня — самая прекрасная на свете.</p>
-            </div>
-            <div class="page-num">~ Страница 16 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 6;">
+            <section class="sheet-card" data-chapter="Глава 15">
+              <div class="page-icon">🎂</div>
+              <div class="page-tag">Глава XV</div>
+              <h2 class="page-heading">Твои 21: время расцвета</h2>
+              <div class="page-body">
+                <p>Тебе сегодня 21 год! Это прекрасный возраст открытий, смелых целей и начала большой, счастливой дороги. Пусть всё задуманное сбывается легко и ярко!</p>
+              </div>
+              <div class="page-num">~ Страница 16 ~</div>
+            </section>
+          </div>
 
           <!-- 17. ГЛАВА 16 -->
-          <section class="book-page" data-chapter="Глава 16">
-            <div class="page-icon">🛡️</div>
-            <div class="page-tag">Глава XVI</div>
-            <h2 class="page-heading">Моя клятва тебе</h2>
-            <div class="page-body">
-              <p>Я обещаю всегда быть твоей опорой и надёжной защитой. Беречь твою улыбку, поддерживать в любых начинаниях, разделять каждую радость и любить тебя всем сердцем до последнего вздоха.</p>
-            </div>
-            <div class="page-num">~ Страница 17 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 5;">
+            <section class="sheet-card" data-chapter="Глава 16">
+              <div class="page-icon">🤝</div>
+              <div class="page-tag">Глава XVI</div>
+              <h2 class="page-heading">Обещание быть рядом</h2>
+              <div class="page-body">
+                <p>Сквозь любые расстояния, проблемы и жизненные бури знай: я всегда на твоей стороне. Ты всегда можешь на меня опереться и довериться мне в любую секунду.</p>
+              </div>
+              <div class="page-num">~ Страница 17 ~</div>
+            </section>
+          </div>
 
           <!-- 18. ГЛАВА 17: ИНТЕРАКТИВНЫЙ ТОРТ -->
-          <section class="book-page" data-chapter="Глава 17: Торт">
-            <div class="page-tag">Глава XVII • Кульминация</div>
-            <h2 class="page-heading" style="margin-bottom:8px">Загадай желание! 🕯️</h2>
-            <div class="book-cake-stage" id="book-cake-stage" onclick="blowCakeCandles()" title="Нажми на торт, чтобы задуть свечи!">
-              <svg class="cake-svg" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="gC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFFDF9"/><stop offset="100%" stop-color="#F5E4E8"/></linearGradient>
-                  <linearGradient id="gB" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8C2643"/><stop offset="100%" stop-color="#5C1A2E"/></linearGradient>
-                  <linearGradient id="gG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#C9A86A"/><stop offset="50%" stop-color="#F2DFB3"/><stop offset="100%" stop-color="#C9A86A"/></linearGradient>
-                  <linearGradient id="gF" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#FF3E00"/><stop offset="40%" stop-color="#FFA800"/><stop offset="80%" stop-color="#FFEE55"/><stop offset="100%" stop-color="#FFFFFF"/></linearGradient>
-                </defs>
-                <ellipse cx="150" cy="255" rx="135" ry="18" fill="rgba(201,168,106,.26)"/>
-                <ellipse cx="150" cy="250" rx="125" ry="14" fill="#FFF" stroke="#C9A86A" stroke-width="2"/>
-                <path d="M45 200C45 200 45 240 150 240C255 240 255 200 255 200L255 170C255 170 255 210 150 210C45 210 45 170 45 170Z" fill="url(#gB)"/>
-                <ellipse cx="150" cy="170" rx="105" ry="24" fill="url(#gC)" stroke="rgba(216,140,154,.43)" stroke-width="1.5"/>
-                <path d="M45 170Q75 195 105 175Q135 198 165 176Q195 196 225 174Q240 185 255 170C255 190 200 205 150 205C100 205 45 190 45 170Z" fill="rgba(247,225,229,.86)"/>
-                <path d="M80 140C80 140 80 175 150 175C220 175 220 140 220 140L220 115C220 115 220 150 150 150C80 150 80 115 80 115Z" fill="url(#gB)"/>
-                <ellipse cx="150" cy="115" rx="70" ry="18" fill="url(#gC)" stroke="rgba(216,140,154,.43)" stroke-width="1.5"/>
-                <circle cx="110" cy="118" r="4" fill="url(#gG)"/><circle cx="130" cy="122" r="5" fill="#8C2643"/>
-                <circle cx="150" cy="123" r="5" fill="url(#gG)"/><circle cx="170" cy="122" r="5" fill="#8C2643"/>
-                <circle cx="190" cy="118" r="4" fill="url(#gG)"/>
-                <text x="150" y="162" font-family="'Playfair Display',serif" font-size="20" font-weight="700" fill="url(#gG)" text-anchor="middle">21</text>
-                <rect x="118" y="70" width="7" height="35" rx="3.5" fill="url(#gG)"/>
-                <path d="M121.5 70L121.5 63" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
-                <g class="cf"><path d="M121.5 48C116 56 116 63 121.5 63C127 63 127 56 121.5 48Z" fill="url(#gF)"/></g>
-                <rect x="146.5" y="60" width="7" height="42" rx="3.5" fill="#FFF" stroke="#D88C9A" stroke-width="1"/>
-                <path d="M150 60L150 52" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
-                <g class="cf fl2"><path d="M150 34C143 44 143 52 150 52C157 52 157 44 150 34Z" fill="url(#gF)"/></g>
-                <rect x="175" y="70" width="7" height="35" rx="3.5" fill="url(#gG)"/>
-                <path d="M178.5 70L178.5 63" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
-                <g class="cf fl3"><path d="M178.5 48C173 56 173 63 178.5 63C184 63 184 56 178.5 48Z" fill="url(#gF)"/></g>
-              </svg>
-            </div>
-            <div class="wish-banner" id="wish-banner">
-              <div style="font-family:var(--fd);font-size:1.35rem;font-weight:700;color:var(--burg);margin-bottom:4px">✨ Твоё желание обязательно исполнится! ✨</div>
-              <div style="font-size:0.95rem;color:var(--dark)">Пусть твой 21-й год будет наполнен морем любви, счастья и чудес! ❤️</div>
-            </div>
-            <div style="font-size:0.85rem;color:var(--muted);font-weight:600;margin-top:6px" id="cake-instruction">Нажми на свечи, чтобы загадать желание!</div>
-            <div class="page-num">~ Страница 18 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 4;">
+            <section class="sheet-card" data-chapter="Глава 17: Торт">
+              <div class="page-tag">Глава XVII • Кульминация</div>
+              <h2 class="page-heading" style="margin-bottom:8px">Загадай желание! 🕯️</h2>
+              <div class="book-cake-stage" id="book-cake-stage" onclick="blowCakeCandles()" title="Нажми на торт, чтобы задуть свечи!">
+                <svg class="cake-svg" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="gC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFFDF9"/><stop offset="100%" stop-color="#F5E4E8"/></linearGradient>
+                    <linearGradient id="gB" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8C2643"/><stop offset="100%" stop-color="#5C1A2E"/></linearGradient>
+                    <linearGradient id="gG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#C9A86A"/><stop offset="50%" stop-color="#F2DFB3"/><stop offset="100%" stop-color="#C9A86A"/></linearGradient>
+                    <linearGradient id="gF" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#FF3E00"/><stop offset="40%" stop-color="#FFA800"/><stop offset="80%" stop-color="#FFEE55"/><stop offset="100%" stop-color="#FFFFFF"/></linearGradient>
+                  </defs>
+                  <ellipse cx="150" cy="255" rx="135" ry="18" fill="rgba(201,168,106,.26)"/>
+                  <ellipse cx="150" cy="250" rx="125" ry="14" fill="#FFF" stroke="#C9A86A" stroke-width="2"/>
+                  <path d="M45 200C45 200 45 240 150 240C255 240 255 200 255 200L255 170C255 170 255 210 150 210C45 210 45 170 45 170Z" fill="url(#gB)"/>
+                  <ellipse cx="150" cy="170" rx="105" ry="24" fill="url(#gC)" stroke="rgba(216,140,154,.43)" stroke-width="1.5"/>
+                  <path d="M45 170Q75 195 105 175Q135 198 165 176Q195 196 225 174Q240 185 255 170C255 190 200 205 150 205C100 205 45 190 45 170Z" fill="rgba(247,225,229,.86)"/>
+                  <path d="M80 140C80 140 80 175 150 175C220 175 220 140 220 140L220 115C220 115 220 150 150 150C80 150 80 115 80 115Z" fill="url(#gB)"/>
+                  <ellipse cx="150" cy="115" rx="70" ry="18" fill="url(#gC)" stroke="rgba(216,140,154,.43)" stroke-width="1.5"/>
+                  <circle cx="110" cy="118" r="4" fill="url(#gG)"/><circle cx="130" cy="122" r="5" fill="#8C2643"/>
+                  <circle cx="150" cy="123" r="5" fill="url(#gG)"/><circle cx="170" cy="122" r="5" fill="#8C2643"/>
+                  <circle cx="190" cy="118" r="4" fill="url(#gG)"/>
+                  <text x="150" y="162" font-family="'Playfair Display',serif" font-size="20" font-weight="700" fill="url(#gG)" text-anchor="middle">21</text>
+                  <rect x="118" y="70" width="7" height="35" rx="3.5" fill="url(#gG)"/>
+                  <path d="M121.5 70L121.5 63" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+                  <g class="cf"><path d="M121.5 48C116 56 116 63 121.5 63C127 63 127 56 121.5 48Z" fill="url(#gF)"/></g>
+                  <rect x="146.5" y="60" width="7" height="42" rx="3.5" fill="#FFF" stroke="#D88C9A" stroke-width="1"/>
+                  <path d="M150 60L150 52" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+                  <g class="cf fl2"><path d="M150 34C143 44 143 52 150 52C157 52 157 44 150 34Z" fill="url(#gF)"/></g>
+                  <rect x="175" y="70" width="7" height="35" rx="3.5" fill="url(#gG)"/>
+                  <path d="M178.5 70L178.5 63" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+                  <g class="cf fl3"><path d="M178.5 48C173 56 173 63 178.5 63C184 63 184 56 178.5 48Z" fill="url(#gF)"/></g>
+                </svg>
+              </div>
+              <div class="wish-banner" id="wish-banner">
+                <div style="font-family:var(--fd);font-size:1.35rem;font-weight:700;color:var(--burg);margin-bottom:4px">✨ Твоё заветное желание обязательно исполнится! ✨</div>
+                <div style="font-size:0.95rem;color:var(--dark)">Пусть твой 21-й год принесёт море побед, радости и исполнения всех мечтаний! ❤️</div>
+              </div>
+              <div style="font-size:0.85rem;color:var(--muted);font-weight:600;margin-top:6px" id="cake-instruction">Нажми на торт, чтобы загадать желание!</div>
+              <div class="page-num">~ Страница 18 ~</div>
+            </section>
+          </div>
 
           <!-- 19. ГЛАВА 18 -->
-          <section class="book-page" data-chapter="Глава 18">
-            <div class="page-icon">🎁</div>
-            <div class="page-tag">Глава XVIII</div>
-            <h2 class="page-heading">21 пожелание к 21-летию</h2>
-            <div class="page-body" style="font-size:1.05rem;line-height:1.65">
-              <p>Желаю тебе бесконечного женского счастья, крепкого здоровья, лёгких дорог, исполнения всех мечтаний, вдохновения, душевного спокойствия и искренних улыбок каждый день!</p>
-              <p>Пусть каждый миг приносит радость, а я позабочусь о том, чтобы ты чувствовала себя самой любимой королевой! 👑</p>
-            </div>
-            <div class="page-num">~ Страница 19 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 3;">
+            <section class="sheet-card" data-chapter="Глава 18">
+              <div class="page-icon">🎁</div>
+              <div class="page-tag">Глава XVIII</div>
+              <h2 class="page-heading">21 пожелание для тебя</h2>
+              <div class="page-body" style="font-size:1.05rem;line-height:1.65">
+                <p>Желаю тебе никогда не унывать, побеждать во всём, за что берёшься, встречать только добрых людей, сохранять своё чистое сердце и радоваться каждому дню!</p>
+                <p>Пусть в твоей жизни будет море вдохновения, гармонии и лёгких побед! 🌟</p>
+              </div>
+              <div class="page-num">~ Страница 19 ~</div>
+            </section>
+          </div>
 
           <!-- 20. ГЛАВА 19 -->
-          <section class="book-page" data-chapter="Глава 19">
-            <div class="page-icon">💖</div>
-            <div class="page-tag">Глава XIX</div>
-            <h2 class="page-heading">Ты — моё всё</h2>
-            <div class="page-body">
-              <p>Ты — моё главное богатство, моё вдохновение, моя любимая жена и смысл моей жизни. Никакие слова не способны передать всю глубину моей любви к тебе.</p>
-              <div class="page-ps">«Люблю тебя больше жизни, моя Ирочка!» ❤️</div>
-            </div>
-            <div class="page-num">~ Страница 20 ~</div>
-          </section>
+          <div class="book-sheet" style="z-index: 2;">
+            <section class="sheet-card" data-chapter="Глава 19">
+              <div class="page-icon">💖</div>
+              <div class="page-tag">Глава XIX</div>
+              <h2 class="page-heading">Ты заняла моё сердце</h2>
+              <div class="page-body">
+                <p>Ты стала самым близким, важным и дорогим человеком. Твоё присутствие в моей жизни — это настоящее чудо, которое я бесконечно ценю.</p>
+                <div class="page-ps">«Спасибо тебе за то, какая ты есть, Ирочка!» ❤️</div>
+              </div>
+              <div class="page-num">~ Страница 20 ~</div>
+            </section>
+          </div>
 
           <!-- 21. ЭПИЛОГ -->
-          <section class="book-page" data-chapter="Эпилог">
-            <div class="page-icon">💋</div>
-            <div class="page-tag">Эпилог</div>
-            <h2 class="page-heading">С Днём Рождения, любимая!</h2>
-            <div class="page-body">
-              <p>Пусть наша книга любви пишется нами всю жизнь — счастливо, ярко и незабываемо!</p>
-              <div style="margin: 12px 0 16px;">
-                <div style="font-family:var(--fb);font-size:0.88rem;color:var(--gold);font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Навсегда твой,</div>
-                <div style="font-family:var(--fsc);font-size:1.8rem;color:var(--burg);font-weight:700">Любящий муж ❤️</div>
+          <div class="book-sheet" style="z-index: 1;">
+            <section class="sheet-card" data-chapter="Эпилог">
+              <div class="page-icon">🎂</div>
+              <div class="page-tag">Эпилог</div>
+              <h2 class="page-heading">С 21-летием, родная!</h2>
+              <div class="page-body">
+                <p>Пусть впереди нас ждут ещё тысячи счастливых часов, душевных разговоров и ярких побед!</p>
+                <div style="margin: 14px 0 16px;">
+                  <div style="font-family:var(--fb);font-size:0.88rem;color:var(--gold);font-weight:700;letter-spacing:0.1em;text-transform:uppercase">Всегда рядом с тобой,</div>
+                  <div style="font-family:var(--fsc);font-size:1.8rem;color:var(--burg);font-weight:700">Твой любимый ❤️</div>
+                </div>
               </div>
-            </div>
-            <button class="page-cta-btn" id="kiss-btn" onclick="sendKisses(event)">Послать поцелуй 💋</button>
-            <div class="page-num">~ Страница 21 • Финал ~</div>
-          </section>
+              <button class="page-cta-btn" id="kiss-btn" onclick="sendKisses(event)">Отправить тепло и поцелуй 💖</button>
+              <div class="page-num">~ Страница 21 • Финал ~</div>
+            </section>
+          </div>
 
-        </div><!-- /pages-container -->
+        </div><!-- /book-sheets -->
       </div><!-- /book-wrap -->
 
       <!-- Подсказка перелистывания -->
-      <div class="scroll-flick-hint">
-        <span>↓ Листайте колёсиком мыши или свайпайте</span>
+      <div class="drag-hint">
+        <span>⟵ Потяните страницу мышкой влево для перелистывания ⟶</span>
       </div>
 
       <!-- Нижняя навигация -->
       <div class="book-bottom-nav">
-        <button class="nav-btn" id="prev-page-btn" onclick="flipPage(-1)" title="Предыдущая страница">←</button>
+        <button class="nav-btn" id="prev-page-btn" onclick="flipPageDirect(-1)" title="Предыдущая страница">←</button>
         <div class="book-progress">
           <div class="book-progress-fill" id="book-progress-fill"></div>
         </div>
-        <button class="nav-btn" id="next-page-btn" onclick="flipPage(1)" title="Следующая страница">→</button>
+        <button class="nav-btn" id="next-page-btn" onclick="flipPageDirect(1)" title="Следующая страница">→</button>
       </div>
 
     </div><!-- /book-stage -->
@@ -799,14 +854,13 @@
     };
 
     // ──────────────────────────────────────────────
-    //  МУЗЫКА НА РЕПИТЕ (loop)
+    //  МУЗЫКА НА РЕПИТЕ (loop) БЕЗ ЛИШНИХ ЗВУКОВ
     // ──────────────────────────────────────────────
     var music = document.getElementById('bg-music');
     var musicBars = document.getElementById('music-bars');
     var musicLabel = document.getElementById('music-label');
     var isMusicPlaying = false;
 
-    // Резервный поиск assets/music.mp3 если music.mp3 не найден
     if(music){
       music.addEventListener('error', function(){
         if(music.src.indexOf('assets/music.mp3') === -1){
@@ -840,7 +894,6 @@
       }
     }
 
-    // Первый жест включает музыку автоматически
     function onFirstGesture(){
       startMusic();
       document.removeEventListener('click', onFirstGesture, true);
@@ -869,7 +922,7 @@
     cdi = setInterval(updateCountdown, 1000);
 
     // ──────────────────────────────────────────────
-    //  СЕКРЕТНЫЙ ВХОД ДЛЯ МУЖА
+    //  СЕКРЕТНЫЙ ВХОД
     // ──────────────────────────────────────────────
     function openSecretPrompt(){
       var m = document.getElementById('secret-modal');
@@ -956,14 +1009,13 @@
       }
       if(book){
         book.classList.add('active');
-        goToPage(0);
+        init3DBook();
       }
       if(bb){ bb.classList.add('show'); }
 
       startMusic();
       if(anim){
         try{ launchConfetti(); }catch(e){}
-        try{ sparkleSound(); }catch(e){}
       }
     }
 
@@ -978,12 +1030,24 @@
     }
 
     // ──────────────────────────────────────────────
-    //  ДВИЖОК ИНТЕРАКТИВНОЙ КНИГИ (21 СТРАНИЦА)
+    //  РЕАЛИСТИЧНЫЙ 3D DRAG-AND-FLIP ДВИЖОК КНИГИ
     // ──────────────────────────────────────────────
-    var pages = document.querySelectorAll('.book-page');
-    var totalPages = pages.length; // 21
-    var currentPageIndex = 0;
-    var isFlipping = false;
+    var sheets = [];
+    var totalSheets = 21;
+    var currentSheetIdx = 0; // индекс активного листа
+    var isDragging = false;
+    var startDragX = 0;
+    var currentDragDelta = 0;
+    var stageEl = null;
+
+    function init3DBook(){
+      sheets = Array.prototype.slice.call(document.querySelectorAll('.book-sheet'));
+      totalSheets = sheets.length;
+      stageEl = document.getElementById('book-stage');
+
+      updateBookUI();
+      setupDragEvents();
+    }
 
     function updateBookUI(){
       var chapterEl = document.getElementById('chapter-label');
@@ -992,98 +1056,167 @@
       var prevBtn = document.getElementById('prev-page-btn');
       var nextBtn = document.getElementById('next-page-btn');
 
-      var curPage = pages[currentPageIndex];
-      var chapterName = curPage ? curPage.getAttribute('data-chapter') : 'Книга Любви';
+      var curSheet = sheets[currentSheetIdx];
+      var card = curSheet ? curSheet.querySelector('.sheet-card') : null;
+      var chapterName = card ? card.getAttribute('data-chapter') : 'Книга Любви';
 
       if(chapterEl) chapterEl.textContent = chapterName;
-      if(numEl) numEl.textContent = (currentPageIndex + 1) + ' / ' + totalPages;
-      if(progressEl) progressEl.style.width = (((currentPageIndex + 1) / totalPages) * 100) + '%';
+      if(numEl) numEl.textContent = (currentSheetIdx + 1) + ' / ' + totalSheets;
+      if(progressEl) progressEl.style.width = (((currentSheetIdx + 1) / totalSheets) * 100) + '%';
 
-      if(prevBtn) prevBtn.disabled = (currentPageIndex === 0);
-      if(nextBtn) nextBtn.disabled = (currentPageIndex === totalPages - 1);
+      if(prevBtn) prevBtn.disabled = (currentSheetIdx === 0);
+      if(nextBtn) nextBtn.disabled = (currentSheetIdx >= totalSheets - 1);
     }
 
-    function goToPage(index){
-      if(index < 0 || index >= totalPages || isFlipping) return;
-      isFlipping = true;
+    function flipSheetTo(idx){
+      if(idx < 0 || idx >= totalSheets) return;
 
-      for(var i=0; i<totalPages; i++){
-        pages[i].classList.remove('active', 'prev');
-        if(i < index){
-          pages[i].classList.add('prev');
-        } else if(i === index){
-          pages[i].classList.add('active');
-        }
-      }
-      currentPageIndex = index;
-      updateBookUI();
-
-      try{ sparkleSound(); }catch(e){}
-
-      setTimeout(function(){
-        isFlipping = false;
-      }, 650);
-    }
-
-    function flipPage(delta){
-      goToPage(currentPageIndex + delta);
-    }
-
-    // Прокрутка колёсиком мыши (1 прокрутка = 1 страница)
-    var wheelCooldown = false;
-    window.addEventListener('wheel', function(e){
-      var book = document.getElementById('book-app');
-      if(!book || !book.classList.contains('active')) return;
-
-      if(wheelCooldown) return;
-      if(Math.abs(e.deltaY) < 18) return;
-
-      wheelCooldown = true;
-      if(e.deltaY > 0){
-        flipPage(1); // вниз -> следующая
-      } else {
-        flipPage(-1); // вверх -> предыдущая
-      }
-
-      setTimeout(function(){
-        wheelCooldown = false;
-      }, 700);
-    }, { passive: true });
-
-    // Свайпы на мобильных устройствах
-    var touchStartY = 0, touchStartX = 0;
-    window.addEventListener('touchstart', function(e){
-      touchStartY = e.touches[0].clientY;
-      touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-
-    window.addEventListener('touchend', function(e){
-      var book = document.getElementById('book-app');
-      if(!book || !book.classList.contains('active')) return;
-
-      var deltaY = touchStartY - e.changedTouches[0].clientY;
-      var deltaX = touchStartX - e.changedTouches[0].clientX;
-
-      if(Math.abs(deltaY) > 40 || Math.abs(deltaX) > 40){
-        if(deltaY > 40 || deltaX > 40){
-          flipPage(1);
+      for(var i=0; i<totalSheets; i++){
+        var sheet = sheets[i];
+        if(i < idx){
+          sheet.style.transition = 'transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)';
+          sheet.style.transform = 'rotateY(-180deg)';
+          sheet.classList.add('flipped');
         } else {
-          flipPage(-1);
+          sheet.style.transition = 'transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)';
+          sheet.style.transform = 'rotateY(0deg)';
+          sheet.classList.remove('flipped');
         }
       }
-    }, { passive: true });
+      currentSheetIdx = idx;
+      updateBookUI();
+    }
 
-    // Клавиши клавиатуры
-    window.addEventListener('keydown', function(e){
-      var book = document.getElementById('book-app');
-      if(!book || !book.classList.contains('active')) return;
-
-      if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' '){
-        flipPage(1);
-      } else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp'){
-        flipPage(-1);
+    function flipPageDirect(delta){
+      var target = currentSheetIdx + delta;
+      if(target >= 0 && target < totalSheets){
+        flipSheetTo(target);
       }
-    });
+    }
+
+    function setupDragEvents(){
+      if(!stageEl) return;
+
+      // Mouse Events
+      stageEl.addEventListener('mousedown', function(e){
+        if(e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+        isDragging = true;
+        startDragX = e.clientX;
+        currentDragDelta = 0;
+        stageEl.classList.add('dragging');
+      });
+
+      window.addEventListener('mousemove', function(e){
+        if(!isDragging) return;
+        currentDragDelta = e.clientX - startDragX;
+
+        var curSheet = sheets[currentSheetIdx];
+        if(currentDragDelta < 0 && curSheet){
+          // Тянем влево -> переворачиваем текущий лист вперед
+          var pct = Math.min(1, Math.max(0, -currentDragDelta / (stageEl.offsetWidth * 0.75)));
+          var angle = -pct * 180;
+          curSheet.style.transition = 'none';
+          curSheet.style.transform = 'rotateY(' + angle + 'deg)';
+        } else if(currentDragDelta > 0 && currentSheetIdx > 0){
+          // Тянем вправо -> возвращаем предыдущий лист назад
+          var prevSheet = sheets[currentSheetIdx - 1];
+          var pctR = Math.min(1, Math.max(0, currentDragDelta / (stageEl.offsetWidth * 0.75)));
+          var angleR = -180 + (pctR * 180);
+          prevSheet.style.transition = 'none';
+          prevSheet.style.transform = 'rotateY(' + angleR + 'deg)';
+        }
+      });
+
+      window.addEventListener('mouseup', function(){
+        if(!isDragging) return;
+        isDragging = false;
+        stageEl.classList.remove('dragging');
+
+        var threshold = stageEl.offsetWidth * 0.18; // 18% ширины для завершения перелистывания
+
+        if(currentDragDelta < -threshold && currentSheetIdx < totalSheets - 1){
+          // Перелистнули вперёд
+          flipSheetTo(currentSheetIdx + 1);
+        } else if(currentDragDelta > threshold && currentSheetIdx > 0){
+          // Перелистнули назад
+          flipSheetTo(currentSheetIdx - 1);
+        } else {
+          // Откат на текущую страницу
+          flipSheetTo(currentSheetIdx);
+        }
+        currentDragDelta = 0;
+      });
+
+      // Touch Events (Мобильные)
+      stageEl.addEventListener('touchstart', function(e){
+        if(e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+        isDragging = true;
+        startDragX = e.touches[0].clientX;
+        currentDragDelta = 0;
+      }, { passive: true });
+
+      window.addEventListener('touchmove', function(e){
+        if(!isDragging) return;
+        currentDragDelta = e.touches[0].clientX - startDragX;
+
+        var curSheet = sheets[currentSheetIdx];
+        if(currentDragDelta < 0 && curSheet){
+          var pct = Math.min(1, Math.max(0, -currentDragDelta / (stageEl.offsetWidth * 0.75)));
+          var angle = -pct * 180;
+          curSheet.style.transition = 'none';
+          curSheet.style.transform = 'rotateY(' + angle + 'deg)';
+        } else if(currentDragDelta > 0 && currentSheetIdx > 0){
+          var prevSheet = sheets[currentSheetIdx - 1];
+          var pctR = Math.min(1, Math.max(0, currentDragDelta / (stageEl.offsetWidth * 0.75)));
+          var angleR = -180 + (pctR * 180);
+          prevSheet.style.transition = 'none';
+          prevSheet.style.transform = 'rotateY(' + angleR + 'deg)';
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchend', function(){
+        if(!isDragging) return;
+        isDragging = false;
+        var threshold = stageEl.offsetWidth * 0.18;
+
+        if(currentDragDelta < -threshold && currentSheetIdx < totalSheets - 1){
+          flipSheetTo(currentSheetIdx + 1);
+        } else if(currentDragDelta > threshold && currentSheetIdx > 0){
+          flipSheetTo(currentSheetIdx - 1);
+        } else {
+          flipSheetTo(currentSheetIdx);
+        }
+        currentDragDelta = 0;
+      }, { passive: true });
+
+      // Колёсико мыши
+      var wheelLock = false;
+      window.addEventListener('wheel', function(e){
+        var book = document.getElementById('book-app');
+        if(!book || !book.classList.contains('active')) return;
+        if(wheelLock || Math.abs(e.deltaY) < 18) return;
+
+        wheelLock = true;
+        if(e.deltaY > 0){
+          flipPageDirect(1);
+        } else {
+          flipPageDirect(-1);
+        }
+        setTimeout(function(){ wheelLock = false; }, 650);
+      }, { passive: true });
+
+      // Стрелки клавиатуры
+      window.addEventListener('keydown', function(e){
+        var book = document.getElementById('book-app');
+        if(!book || !book.classList.contains('active')) return;
+
+        if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' '){
+          flipPageDirect(1);
+        } else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp'){
+          flipPageDirect(-1);
+        }
+      });
+    }
 
     // ──────────────────────────────────────────────
     //  ИНТЕРАКТИВНЫЙ ТОРТ
@@ -1101,16 +1234,15 @@
       if(instr) instr.textContent = '✨ Свечи задуты! Желание отправлено во Вселенную! 🎉';
 
       launchConfetti();
-      sparkleSound();
     }
 
     // ──────────────────────────────────────────────
-    //  КНОПКА ПОЦЕЛУЕВ
+    //  КНОПКА ПОЦЕЛУЕВ И ТЕПЛА
     // ──────────────────────────────────────────────
     function sendKisses(e){
       var ox = e ? e.clientX : window.innerWidth/2;
       var oy = e ? e.clientY : window.innerHeight/2;
-      var icons = ['💖','💋','❤️','🌸','✨','💕','🌹'];
+      var icons = ['💖','💋','❤️','🌸','✨','💕','🌹','🎧'];
       for(var i=0; i<16; i++){
         (function(){
           var f = document.createElement('div');
@@ -1129,7 +1261,6 @@
         })();
       }
       launchConfetti();
-      sparkleSound();
     }
 
     // ──────────────────────────────────────────────
@@ -1278,7 +1409,7 @@
     })();
 
     // ──────────────────────────────────────────────
-    //  КОНФЕТТИ И ЗВУКИ
+    //  КОНФЕТТИ
     // ──────────────────────────────────────────────
     function launchConfetti(){
       var cols=['#5C1A2E','#D88C9A','#F7E1E5','#C9A86A','#FF4D6D','#FFD166'];
@@ -1290,13 +1421,6 @@
         for(var i=pc.length-1;i>=0;i--){ var p=pc[i]; p.x+=p.vx;p.y+=p.vy;p.vy+=.34;p.rot+=p.rs;p.a-=.012; if(p.a<=0){pc.splice(i,1);continue;} cx2.save();cx2.translate(p.x,p.y);cx2.rotate(p.rot*Math.PI/180);cx2.globalAlpha=Math.max(0,p.a);cx2.fillStyle=p.c;cx2.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz*.57);cx2.restore(); }
         if(pc.length) requestAnimationFrame(upd);
       })();
-    }
-
-    function sparkleSound(){
-      try{
-        var A=window.AudioContext||window.webkitAudioContext; if(!A) return; var ac=new A();
-        [523,659,784,1047,1319].forEach(function(f,i){ var o=ac.createOscillator(),g=ac.createGain(); o.type='sine'; o.frequency.setValueAtTime(f,ac.currentTime+i*.09); g.gain.setValueAtTime(0,ac.currentTime+i*.09); g.gain.linearRampToValueAtTime(.11,ac.currentTime+i*.09+.04); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+i*.09+.75); o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+i*.09);o.stop(ac.currentTime+i*.09+.77); });
-      }catch(e){}
     }
 
     // Проверить сохранённый доступ
