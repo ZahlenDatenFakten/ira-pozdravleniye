@@ -100,8 +100,8 @@
       opacity: 0; pointer-events: none; transition: opacity 0.5s var(--ease);
     }
     #secret-modal.active { opacity: 1; pointer-events: auto; }
-    .modal-card { text-align: center; width: 100%; max-width: 340px; padding: 40px; transform: translateY(20px); transition: transform 0.7s var(--ease); }
-    #secret-modal.active .modal-card { transform: translateY(0); }
+    .modal-card { text-align: center; width: 100%; max-width: 340px; padding: 40px; transform: scale(0.95) translateY(20px); transition: transform 0.7s var(--ease); }
+    #secret-modal.active .modal-card { transform: scale(1) translateY(0); }
     .modal-title { font-family: var(--fd); font-size: 1.8rem; font-weight: 400; color: #FFFFFF; margin-bottom: 35px; letter-spacing: 0.05em; }
     .modal-input {
       width: 100%; padding: 12px 0; border: none; border-bottom: 1px solid #222;
@@ -120,6 +120,7 @@
     .modal-submit:hover { background: #E0E0E0; transform: scale(1.03); }
     .modal-cancel { background: transparent; border: none; color: #444; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: color 0.4s; }
     .modal-cancel:hover { color: #999; }
+    .ls-unlock-btn:active, .modal-submit:active, .modal-cancel:active, .hero-cta:active, .lb-close:active, #back-btn:active { transform: scale(0.97) !important; transition: transform 0.1s !important; }
 
     /* ============================================================
        КНОПКА «НАЗАД К ТАЙМЕРУ»
@@ -391,7 +392,12 @@
       </div>
       <div class="hero-age reveal rd3">Тебе сегодня 21 год ✨</div>
       <p class="hero-sub reveal rd3">Этот день особенный, потому что в этот день родилась ты — моё счастье, моё вдохновение и самое дорогое сокровище в мире.</p>
-      <div class="reveal rd3"><a href="#letter-section" class="hero-cta">Читать признание 💌</a></div>
+      <div class="reveal rd3">
+        <a href="#letter-section" class="hero-cta">
+          Читать признание
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px; vertical-align:middle; display:inline-block;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
       <a href="#letter-section" class="scroll-hint reveal rd3">
         <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
         <span>Листай вниз</span>
