@@ -340,7 +340,7 @@
     // ──────────────────────────────────────────────
     //  ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И ХРАНИЛИЩЕ
     // ──────────────────────────────────────────────
-    var TARGET_DATE = new Date('2026-09-19T00:00:00');
+    var TARGET_DATE = new Date('2026-09-19T00:00:00+03:00');
     var SafeStorage = {
       get: function(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
       set: function(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
@@ -359,11 +359,15 @@
       if(m) m.classList.remove('active');
     }
 
-    function submitSecretCode(){
+    async function submitSecretCode(){
       var i=document.getElementById('pass-input');
       var val=i ? i.value.trim().toLowerCase() : '';
       var err=document.getElementById('pass-error');
-      if(val==='irapozdravlyayu'){
+      
+      var hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(val));
+      var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b){ return b.toString(16).padStart(2, '0'); }).join('');
+
+      if(hashHex === '4fc8b7260b041ff828688e61cbd90e8b65e0c8c0604122283014265600c9c242'){
         SafeStorage.set('ira_ok','yes');
         closeSecretModal();
         unlockWebsite(true);
@@ -422,9 +426,9 @@
 
       if(ls){
         if(anim) ls.classList.add('unlocking');
-        setTimeout(function(){ ls.style.display='none'; }, anim ? 860 : 0);
+        window._unlockTimeout = setTimeout(function(){ ls.style.display='none'; }, anim ? 860 : 0);
       }
-      if(mc){ mc.classList.add('visible'); if(window._startReveal) window._startReveal(); }
+      if(mc){ mc.style.display='block'; mc.classList.add('visible'); if(window._startReveal) window._startReveal(); }
       if(bb){ bb.classList.add('show'); }
 
       // Запустить/показать фоновое дерево поздравления
@@ -447,10 +451,21 @@
       var bb=document.getElementById('back-btn');
       var bg=document.getElementById('bg-tree-canvas');
 
+      if(window._unlockTimeout) clearTimeout(window._unlockTimeout);
+
       if(mc){ mc.classList.remove('visible'); mc.style.display='none'; }
       if(bb){ bb.classList.remove('show'); }
       if(bg){ bg.classList.remove('visible'); setTimeout(function(){ bg.style.display='none'; },1000); }
-      if(ls){ ls.classList.remove('unlocking'); ls.style.display='flex'; ls.style.opacity='1'; ls.style.transform='none'; }
+      if(ls){ 
+        ls.classList.remove('unlocking'); 
+        ls.style.display='flex'; 
+        ls.style.opacity='1'; 
+        ls.style.transform='none'; 
+        ['ls-top', 'cd-grid', 'ls-btn'].forEach(function(id){
+          var el = document.getElementById(id);
+          if(el) { el.classList.remove('cinematic-hidden'); el.classList.add('cinematic-reveal'); }
+        });
+      }
     }
   </script>
 </head>
