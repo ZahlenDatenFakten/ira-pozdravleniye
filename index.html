@@ -906,6 +906,10 @@
     // Проверить сохранённый доступ
     if(SafeStorage.get('ira_ok')==='yes' || new Date() >= TARGET_DATE){
       unlockWebsite(false);
+    } else {
+      setTimeout(function(){
+        startCinematicIntro();
+      }, 100);
     }
 
     // ──────────────────────────────────────────────
