@@ -53,31 +53,34 @@
     #intro-screen {
       position: fixed; inset: 0; z-index: 99999;
       display: flex; align-items: center; justify-content: center;
-      background: #050505; color: #FFF; cursor: pointer;
+      background: var(--cream); color: var(--burg); cursor: pointer;
       transition: opacity 1s var(--ease), visibility 1s;
     }
     .intro-pulse {
       font-family: var(--fb); font-size: 0.85rem; letter-spacing: 0.3em; text-transform: uppercase;
       animation: pulse 2s infinite cubic-bezier(.4,0,.6,1);
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: var(--rf);
+      border: 1px solid rgba(216,140,154,.4); background: rgba(255,255,255,0.5);
     }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+    @keyframes pulse { 0%,100%{opacity:1; transform: scale(1);} 50%{opacity:.6; transform: scale(0.98);} }
 
     #locked-screen {
       position: fixed; inset: 0; z-index: 9000;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: #050505; /* Deep black */
-      color: #F5F5F5;
+      background: linear-gradient(135deg, var(--cream), #FDFBF7);
+      color: var(--dark);
       transition: opacity 1.2s var(--ease), filter 1.2s var(--ease);
     }
     #locked-tree-canvas{
       position:absolute;inset:0;
       width:100%;height:100%;
       display:block;z-index:0;
-      opacity:.8; 
+      opacity: .85; 
     }
     #locked-screen::before {
       content:''; position:absolute; inset:0;
-      background: radial-gradient(circle at center, transparent 0%, rgba(5,5,5,0.85) 100%);
+      background: radial-gradient(circle at center, transparent 0%, rgba(247, 225, 229, 0.4) 100%);
       z-index: 1; pointer-events:none;
     }
     .ls-top, .ls-bottom { position: relative; z-index: 2; }
@@ -92,23 +95,27 @@
       opacity: 0; filter: blur(12px); pointer-events: none;
     }
     .ls-top { text-align: center; margin-bottom: 12vh; padding: 0 20px; }
-    .ls-title { font-family: var(--fd); font-size: clamp(2.4rem, 8vw, 4.8rem); font-weight: 400; letter-spacing: 0.03em; margin: 16px 0; color: #FFFFFF; }
-    .ls-sub { font-family: var(--fb); font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: #666666; }
-    .ls-sub strong { color: #AAAAAA; font-weight: 400; }
+    .ls-title { font-family: var(--fd); font-size: clamp(2.4rem, 8vw, 4.8rem); font-weight: 600; letter-spacing: 0.03em; margin: 16px 0; color: var(--burg); }
+    .ls-title .char-reveal { background: linear-gradient(135deg, var(--burg), #8c2643, var(--gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .ls-sub { font-family: var(--fb); font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+    .ls-sub strong { color: var(--gold); font-weight: 700; }
     
     .ls-bottom { text-align: center; width: 100%; max-width: 800px; padding: 0 20px; }
     .cd-grid { display: flex; justify-content: center; gap: clamp(18px, 5vw, 50px); margin-bottom: 70px; }
     .cd-card { display: flex; flex-direction: column; align-items: center; }
-    .cd-val { font-family: var(--fd); font-size: clamp(3.2rem, 9vw, 6.5rem); font-weight: 400; color: #FFFFFF; line-height: 1; letter-spacing: -0.02em; }
-    .cd-lbl { font-family: var(--fb); font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: #444444; margin-top: 14px; }
+    .cd-val { font-family: var(--fd); font-size: clamp(3.2rem, 9vw, 6.5rem); font-weight: 600; color: var(--burg); line-height: 1; letter-spacing: -0.02em; }
+    .cd-lbl { font-family: var(--fb); font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); margin-top: 14px; font-weight: 600; }
     
     .ls-unlock-btn {
-      background: transparent; border: none; color: #333333; font-family: var(--fb);
-      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
-      cursor: pointer; transition: color 0.5s var(--ease);
-      padding: 10px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.85); border: 1px solid var(--rose); color: var(--burg); font-family: var(--fb);
+      font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700;
+      cursor: pointer; transition: all 0.4s var(--ease);
+      padding: 12px 28px; border-radius: var(--rf); box-shadow: var(--sh);
     }
-    .ls-unlock-btn:hover { color: #888888; }
+    .ls-unlock-btn:hover {
+      background: #fff; border-color: var(--burg); transform: translateY(-3px); box-shadow: var(--shr);
+    }
     
     /* ============================================================
        МОДАЛКА ПАРОЛЯ
