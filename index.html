@@ -661,8 +661,8 @@
       var t=0, progress=0, running=false;
 
       var cfg = mode === 'locked'
-        ? { trunkH:.38, maxD:7, lMin:5, lMax:10, speed:.0045, fallRate:.28, strokeAlpha:.9  }
-        : { trunkH:.40, maxD:8, lMin:6, lMax:12, speed:.0030, fallRate:.18, strokeAlpha:.75 };
+        ? { trunkH:.38, maxD:5, lMin:4, lMax:8, speed:.0045, fallRate:.28, strokeAlpha:.9  }
+        : { trunkH:.40, maxD:6, lMin:5, lMax:10, speed:.0030, fallRate:.18, strokeAlpha:.75 };
 
       function measure(){
         if(mode==='locked'){
@@ -762,7 +762,7 @@
             // Золотой огонёк на кончике
             if(lT > .04 && lT < .97){
               ctx.save();
-              ctx.fillStyle = '#FFD700'; ctx.shadowColor = '#FFD700'; ctx.shadowBlur = 13;
+              ctx.fillStyle = '#FFD700'; 
               ctx.globalAlpha = .92;
               ctx.beginPath(); ctx.arc(cx,cy,2.7,0,Math.PI*2); ctx.fill();
               ctx.restore();
@@ -781,7 +781,7 @@
             var sway = Math.sin(t*l.swS*60+l.swO)*3.8;
             // Мягкое свечение
             ctx.save();
-            ctx.shadowColor = l.color; ctx.shadowBlur = 6;
+            // убрали shadowBlur для оптимизации
             drawHeart(l.x+sway, l.y, l.size, l.color, l.rot+sway*.038, l.alpha);
             ctx.restore();
           }
