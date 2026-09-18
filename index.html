@@ -2267,6 +2267,7 @@
     }
 
     function unlockWebsiteExperience(animated) {
+      SafeStorage.set('ira_unlocked', 'true');
       const ls = document.getElementById('locked-screen');
       const mc = document.getElementById('main-content');
       const backBtn = document.getElementById('back-to-timer-btn');
