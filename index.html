@@ -832,6 +832,272 @@
       line-height: 1.7;
     }
 
+    /* ── СЕКЦИЯ: СОКРОВЕННЫЙ СТИХ ДЛЯ ЛУННОЛИКОЙ ─────── */
+    .poem-section-wrapper {
+      background: linear-gradient(180deg, rgba(28, 16, 36, 0.94) 0%, rgba(14, 8, 20, 0.98) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: clamp(42px, 7vw, 76px) clamp(22px, 5vw, 54px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 45px rgba(226, 140, 158, 0.1);
+      position: relative;
+      max-width: 860px;
+      margin: 0 auto;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      overflow: visible;
+    }
+
+    .poem-celestial-seal {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #8A243D 0%, #280814 100%);
+      border: 2px solid var(--gold-primary);
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.7), 0 0 22px rgba(230, 202, 146, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
+      z-index: 2;
+    }
+
+    .poem-celestial-seal svg {
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+      animation: moonSealGlow 3.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes moonSealGlow {
+      0% {
+        transform: scale(0.96);
+        filter: drop-shadow(0 0 4px rgba(230, 202, 146, 0.4));
+      }
+      100% {
+        transform: scale(1.06);
+        filter: drop-shadow(0 0 14px rgba(247, 204, 214, 0.8));
+      }
+    }
+
+    .poem-story-box {
+      background: rgba(230, 202, 146, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: clamp(24px, 4vw, 36px);
+      margin-top: 14px;
+      margin-bottom: 34px;
+      position: relative;
+    }
+
+    .poem-story-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--gold-primary);
+      margin-bottom: 14px;
+    }
+
+    .poem-salutation {
+      font-family: var(--font-display);
+      font-size: clamp(1.22rem, 2.6vw, 1.6rem);
+      color: var(--gold-light);
+      margin-bottom: 18px;
+      letter-spacing: 0.03em;
+      line-height: 1.4;
+    }
+
+    .poem-story-text {
+      font-family: var(--font-serif);
+      font-size: clamp(1.04rem, 2.1vw, 1.18rem);
+      line-height: 1.95;
+      color: var(--text-primary);
+      text-align: justify;
+      margin-bottom: 14px;
+    }
+
+    .poem-story-text:last-child {
+      margin-bottom: 0;
+    }
+
+    .poem-reveal-trigger-area {
+      text-align: center;
+      margin: 8px 0 0;
+    }
+
+    .poem-reveal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 36px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, rgba(230, 202, 146, 0.16) 0%, rgba(226, 140, 158, 0.22) 100%);
+      border: 1.5px solid var(--gold-primary);
+      color: var(--gold-light);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 24px rgba(230, 202, 146, 0.15);
+      transition: all 0.35s var(--ease-out);
+      backdrop-filter: blur(12px);
+    }
+
+    .poem-reveal-btn:hover {
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+      color: #150E06;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(230, 202, 146, 0.4);
+    }
+
+    .poem-reveal-btn:active {
+      transform: scale(0.97);
+    }
+
+    .poem-reveal-btn.active {
+      background: linear-gradient(135deg, #6E1228, #3A0A16);
+      border-color: var(--rose-primary);
+      color: var(--rose-light);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 20px rgba(226, 140, 158, 0.3);
+    }
+
+    /* Анимация плавного раскрытия свитка через Grid 0fr -> 1fr */
+    .poem-accordion-grid {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.85s var(--ease-smooth);
+    }
+
+    .poem-accordion-grid.open {
+      grid-template-rows: 1fr;
+    }
+
+    .poem-accordion-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .poem-parchment {
+      margin-top: 36px;
+      padding: clamp(32px, 5vw, 56px) clamp(20px, 4vw, 44px);
+      background: linear-gradient(180deg, rgba(230, 202, 146, 0.04) 0%, rgba(78, 20, 36, 0.14) 50%, rgba(230, 202, 146, 0.03) 100%);
+      border: 1px solid rgba(230, 202, 146, 0.28);
+      border-radius: var(--radius-md);
+      position: relative;
+      text-align: center;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.4), 0 12px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    .poem-parchment::before,
+    .poem-parchment::after {
+      content: '✦';
+      position: absolute;
+      font-size: 0.85rem;
+      color: var(--gold-primary);
+      opacity: 0.6;
+    }
+
+    .poem-parchment::before {
+      top: 14px;
+      left: 18px;
+    }
+
+    .poem-parchment::after {
+      bottom: 14px;
+      right: 18px;
+    }
+
+    .poem-parchment-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .poem-parchment-top-line {
+      flex: 1;
+      max-width: 90px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary));
+    }
+
+    .poem-parchment-top-line.right {
+      background: linear-gradient(90deg, var(--gold-primary), transparent);
+    }
+
+    .poem-parchment-caption {
+      font-size: 0.74rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--gold-primary);
+    }
+
+    .poem-verse-group {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .poem-stanza {
+      font-family: var(--font-serif);
+      font-size: clamp(1.22rem, 2.5vw, 1.5rem);
+      line-height: 2.15;
+      font-style: italic;
+      color: var(--text-primary);
+      letter-spacing: 0.015em;
+      transition: color 0.3s ease;
+    }
+
+    .poem-stanza:hover {
+      color: var(--gold-light);
+    }
+
+    .poem-stanza-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--gold-dark);
+      font-size: 0.9rem;
+      margin: 4px 0;
+      opacity: 0.75;
+    }
+
+    .poem-divider-glyph {
+      font-size: 1.15rem;
+      color: var(--rose-primary);
+    }
+
+    .poem-stanza-highlight {
+      background: rgba(230, 202, 146, 0.06);
+      border: 1px solid rgba(230, 202, 146, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      color: var(--gold-light);
+      text-shadow: 0 0 20px rgba(230, 202, 146, 0.25);
+    }
+
+    .poem-signature {
+      margin-top: 36px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(230, 202, 146, 0.16);
+      font-family: var(--font-serif);
+      font-size: clamp(1.02rem, 2vw, 1.16rem);
+      font-style: italic;
+      color: var(--rose-light);
+      letter-spacing: 0.03em;
+    }
+
     /* ── СЕКЦИЯ 2: 21 ГРАНЬ МОЕЙ ЛЮБВИ ───────────── */
     .section-header {
       text-align: center;
@@ -1491,6 +1757,131 @@
       </article>
     </section>
 
+    <!-- ============================================================
+         СЕКЦИЯ: СОКРОВЕННЫЙ СТИХ ДЛЯ ЛУННОЛИКОЙ
+         ============================================================ -->
+    <section class="container" id="poem-view">
+      <div class="section-header fade-reveal">
+        <div class="section-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <span>Только для тебя, Лунноликая</span>
+        </div>
+        <h2 class="section-title">Сокровенные строки</h2>
+      </div>
+
+      <div class="poem-section-wrapper fade-reveal delay-1">
+        <!-- Лунная печать -->
+        <div class="poem-celestial-seal" title="Лунноликая">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            <circle cx="12" cy="7" r="1" fill="currentColor"></circle>
+          </svg>
+        </div>
+
+        <!-- Предыстория создания стиха -->
+        <div class="poem-story-box">
+          <div class="poem-story-badge">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span>История рождения этих строк</span>
+          </div>
+
+          <h3 class="poem-salutation">
+            Моя прекрасная мадонна, солнцесветная мадемуазель, моя дорогая Лунноликая...
+          </h3>
+
+          <p class="poem-story-text">
+            Этот стих для меня — не просто рифмованные строки. Я писал его в те времена, когда мне было невыносимо тяжело, когда на душе было темно, а усталость и жизненные обстоятельства доводили до предела так, что слёзы сами наворачивались на глаза. Я писал его долго, бережно и трепетно подбирая каждое слово, чтобы развеять голову от давящих мыслей и удержаться за свет.
+          </p>
+          <p class="poem-story-text">
+            Для меня этот стих значит неизмеримо много: я создавал его по крупицам, частями, вплетая в него разные события и мгновения нашей с тобой истории. Именно эти живые моменты делают каждую строчку особенной, глубокой и по-настоящему священной.
+          </p>
+          <p class="poem-story-text">
+            Ты исцелила мою душу своим голосом, став моим лучом, воздухом и плечом сквозь любые километры и экраны. И сегодня, в Твой особенный день, я с благоговением доверяю это сокровище Твоему сердцу.
+          </p>
+        </div>
+
+        <!-- Кнопка интерактивного раскрытия свитка -->
+        <div class="poem-reveal-trigger-area">
+          <button class="poem-reveal-btn" id="poem-reveal-button" onclick="togglePoemReveal(event)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            <span id="poem-btn-label">Прикоснуться и открыть стих, Лунноликая ✨</span>
+          </button>
+        </div>
+
+        <!-- Раскрывающийся свиток стихотворения -->
+        <div class="poem-accordion-grid" id="poem-accordion-grid">
+          <div class="poem-accordion-inner">
+            <div class="poem-parchment">
+              <div class="poem-parchment-top">
+                <div class="poem-parchment-top-line"></div>
+                <span class="poem-parchment-caption">Посвящение для Лунноликой</span>
+                <div class="poem-parchment-top-line right"></div>
+              </div>
+
+              <div class="poem-verse-group">
+                <div class="poem-stanza">
+                  Календарь говорит, что день обычный,<br>
+                  Для многих просто дата, ритм привычный.<br>
+                  Но для меня как самый важный сдвиг,<br>
+                  Когда Твой голос в наушниках возник.
+                </div>
+
+                <div class="poem-stanza-divider">
+                  <span>✦</span>
+                  <span class="poem-divider-glyph">❦</span>
+                  <span>✦</span>
+                </div>
+
+                <div class="poem-stanza">
+                  Сквозь километры, игры, мониторы,<br>
+                  Сквозь наши полуночные разговоры,<br>
+                  Ты исцеляешь душу, став лучом,<br>
+                  Моей поддержкой, воздухом, плечом.
+                </div>
+
+                <div class="poem-stanza-divider">
+                  <span>✦</span>
+                  <span class="poem-divider-glyph">❦</span>
+                  <span>✦</span>
+                </div>
+
+                <div class="poem-stanza">
+                  Пусть годы летят, как быстрые птицы,<br>
+                  Но Ты не теряй ни единой страницы.<br>
+                  Твой день рождения начало начал,<br>
+                  Моя жемчужина, мой искренний причал.
+                </div>
+
+                <div class="poem-stanza-divider">
+                  <span>✦</span>
+                  <span class="poem-divider-glyph">❦</span>
+                  <span>✦</span>
+                </div>
+
+                <div class="poem-stanza poem-stanza-highlight">
+                  Пусть этот мир Тебе будет как дом,<br>
+                  Где всё понятно и нет ничего "потом".<br>
+                  Моя мадонна, честно, без прикрас,<br>
+                  С днем Твоего рождения. И с тем, что Ты - сейчас.
+                </div>
+              </div>
+
+              <div class="poem-signature">
+                С безграничной нежностью для моей прекрасной Мадонны и Лунноликой Иры 🌙🌹
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- СЕКЦИЯ: 21 ГРАНЬ МОЕЙ ЛЮБВИ -->
     <section class="container" id="facets-view">
       <div class="section-header fade-reveal">
@@ -2113,6 +2504,62 @@
         });
 
         setTimeout(() => el.remove(), 1800);
+      }
+    }
+
+    /* ── СТИХОТВОРЕНИЕ ДЛЯ ЛУННОЛИКОЙ: РАСКРЫТИЕ СВИТКА ─ */
+    let isPoemOpen = false;
+    function togglePoemReveal(e) {
+      const grid = document.getElementById('poem-accordion-grid');
+      const btn = document.getElementById('poem-reveal-button');
+      const label = document.getElementById('poem-btn-label');
+      if (!grid || !btn) return;
+
+      isPoemOpen = !isPoemOpen;
+
+      if (isPoemOpen) {
+        grid.classList.add('open');
+        btn.classList.add('active');
+        if (label) label.textContent = 'Свиток открыт в Твоём сердце, Лунноликая 🌹';
+        playCrystalChime(784);
+        setTimeout(() => playCrystalChime(1046.5), 180);
+
+        // Салют из лунных искр и лепестков вокруг кнопки
+        const ox = e ? e.clientX : window.innerWidth / 2;
+        const oy = e ? e.clientY : window.innerHeight / 2;
+        const sparkles = ['🌙', '✨', '🌹', '💫', '💛', '🌟'];
+        for (let i = 0; i < 18; i++) {
+          const el = document.createElement('div');
+          el.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+          el.style.cssText = `
+            position: fixed; pointer-events: none; z-index: 999999;
+            font-size: ${Math.random() * 14 + 16}px;
+            left: ${ox}px; top: ${oy}px;
+            transform: translate(-50%, -50%);
+            transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 1; filter: drop-shadow(0 0 10px rgba(230, 202, 146, 0.7));
+          `;
+          document.body.appendChild(el);
+
+          const angle = Math.random() * Math.PI * 2;
+          const dist = Math.random() * 180 + 60;
+          const dx = ox + Math.cos(angle) * dist;
+          const dy = oy + Math.sin(angle) * dist - 50;
+
+          requestAnimationFrame(() => {
+            el.style.left = dx + 'px';
+            el.style.top = dy + 'px';
+            el.style.opacity = '0';
+            el.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.6 + 1.2})`;
+          });
+
+          setTimeout(() => el.remove(), 1500);
+        }
+      } else {
+        grid.classList.remove('open');
+        btn.classList.remove('active');
+        if (label) label.textContent = 'Прикоснуться и открыть стих, Лунноликая ✨';
+        playCrystalChime(659.25);
       }
     }
 
