@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>С 21-летием, любимая Ирочка! • 19.09.2026</title>
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%23120917%22 stroke=%22%23E6CA92%22 stroke-width=%224%22/><path d=%22M50 28 C35 15, 18 30, 25 50 C32 68, 50 82, 50 82 C50 82, 68 68, 75 50 C82 30, 65 15, 50 28 Z%22 fill=%22%23E28C9E%22/></svg>">
@@ -140,9 +140,9 @@
        ============================================================ */
     .top-controls {
       position: fixed;
-      top: 20px;
-      left: 20px;
-      right: 20px;
+      top: max(14px, env(safe-area-inset-top, 14px));
+      left: max(14px, env(safe-area-inset-left, 14px));
+      right: max(14px, env(safe-area-inset-right, 14px));
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -254,10 +254,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: clamp(24px, 5vh, 48px) 24px clamp(32px, 6vh, 60px);
+      padding: max(20px, env(safe-area-inset-top, 20px)) max(16px, env(safe-area-inset-right, 16px)) max(28px, env(safe-area-inset-bottom, 28px)) max(16px, env(safe-area-inset-left, 16px));
       background: radial-gradient(circle at center, #100816 0%, #060408 100%);
       transition: opacity 1.2s var(--ease-out), filter 1.2s var(--ease-out);
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
     }
 
     #locked-screen.unlocking {
@@ -269,13 +271,14 @@
 
     /* 3D WebGL Canvas для кристаллического сердца */
     #locked-3d-canvas {
-      position: absolute;
+      position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       z-index: 1;
       pointer-events: auto;
       cursor: grab;
+      touch-action: pan-y;
     }
 
     #locked-3d-canvas:active {
@@ -352,8 +355,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 28px;
+      gap: clamp(14px, 3vh, 28px);
       pointer-events: auto;
+      margin-bottom: max(0px, env(safe-area-inset-bottom, 0px));
     }
 
     /* Таймер обратного отсчёта */
@@ -1331,6 +1335,7 @@
       margin: 0 auto 24px;
       cursor: pointer;
       user-select: none;
+      touch-action: pan-y;
     }
 
     #cake-3d-canvas {
@@ -1338,6 +1343,7 @@
       height: 100%;
       display: block;
       border-radius: var(--radius-md);
+      touch-action: pan-y;
     }
 
     .cake-viewport-hint {
@@ -1515,6 +1521,290 @@
 
     .delay-3 {
       transition-delay: 0.45s;
+    }
+
+    /* ============================================================
+       МОБИЛЬНАЯ АДАПТАЦИЯ И ОПТИМИЗАЦИЯ ДЛЯ ТЕЛЕФОНОВ (ULTRA-FLUID MOBILE)
+       ============================================================ */
+    @media (max-width: 768px) {
+      /* Общие правила и скролл */
+      html, body {
+        overflow-x: hidden;
+      }
+
+      .container {
+        padding: 50px 16px;
+      }
+
+      .section-header {
+        margin-bottom: 38px;
+      }
+
+      .section-title {
+        font-size: clamp(1.9rem, 7.5vw, 2.7rem);
+      }
+
+      .top-controls {
+        top: max(12px, env(safe-area-inset-top, 12px));
+        left: max(12px, env(safe-area-inset-left, 12px));
+        right: max(12px, env(safe-area-inset-right, 12px));
+      }
+
+      .lux-button {
+        padding: 8px 14px;
+        font-size: 0.74rem;
+        gap: 6px;
+      }
+
+      /* Главный экран (Hero) */
+      .hero-view {
+        padding: max(110px, calc(env(safe-area-inset-top, 0px) + 90px)) 16px 60px;
+        min-height: 85vh;
+      }
+
+      .hero-heading {
+        font-size: clamp(2.35rem, 10vw, 3.6rem);
+        line-height: 1.12;
+      }
+
+      .hero-subhead {
+        font-size: 1.22rem;
+        margin-bottom: 18px;
+      }
+
+      .hero-lead {
+        font-size: 1.02rem;
+        line-height: 1.7;
+        margin-bottom: 32px;
+      }
+
+      .hero-cta {
+        padding: 14px 28px;
+        font-size: 0.82rem;
+        width: 100%;
+        max-width: 320px;
+        justify-content: center;
+      }
+
+      /* Письмо */
+      .letter-wrapper {
+        padding: 36px 18px 28px;
+        border-radius: var(--radius-md);
+      }
+
+      .letter-seal {
+        top: -20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        font-size: 1.15rem;
+      }
+
+      .letter-greeting {
+        font-size: 1.45rem;
+        margin-bottom: 20px;
+      }
+
+      .letter-paragraph {
+        font-size: 1.04rem;
+        line-height: 1.85;
+        text-align: left;
+        margin-bottom: 18px;
+      }
+
+      .letter-dropcap {
+        font-size: 3rem;
+        padding: 2px 8px 0 0;
+      }
+
+      .letter-postscript {
+        font-size: 1.05rem;
+        margin-top: 26px;
+        padding-top: 18px;
+      }
+
+      /* Секция стихотворения Лунноликой */
+      .poem-section-wrapper {
+        padding: 38px 16px 26px;
+        border-radius: var(--radius-md);
+      }
+
+      .poem-celestial-seal {
+        top: -24px;
+        width: 48px;
+        height: 48px;
+      }
+
+      .poem-celestial-seal svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .poem-story-box {
+        padding: 20px 14px;
+        margin-top: 12px;
+        margin-bottom: 26px;
+      }
+
+      .poem-salutation {
+        font-size: 1.25rem;
+        line-height: 1.35;
+        margin-bottom: 14px;
+      }
+
+      .poem-story-text {
+        font-size: 1rem;
+        line-height: 1.8;
+        text-align: left;
+        margin-bottom: 12px;
+      }
+
+      .poem-reveal-btn {
+        width: 100%;
+        max-width: 360px;
+        padding: 14px 18px;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+      }
+
+      .poem-parchment {
+        margin-top: 26px;
+        padding: 24px 14px;
+      }
+
+      .poem-stanza {
+        font-size: 1.14rem;
+        line-height: 2.05;
+      }
+
+      .poem-signature {
+        font-size: 0.96rem;
+        margin-top: 26px;
+        padding-top: 18px;
+      }
+
+      /* Грани любви */
+      .facets-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 40px;
+      }
+
+      .facet-card {
+        padding: 28px 20px;
+      }
+
+      .facet-title {
+        font-size: 1.3rem;
+      }
+
+      .facet-text {
+        font-size: 0.98rem;
+        line-height: 1.75;
+      }
+
+      /* Шкатулка посланий */
+      .mb-quote-card {
+        padding: 28px 18px;
+        min-height: 140px;
+      }
+
+      .mb-quote-text {
+        font-size: 1.15rem;
+        line-height: 1.6;
+      }
+
+      .mb-draw-button {
+        width: 100%;
+        max-width: 320px;
+        padding: 14px 24px;
+        font-size: 0.82rem;
+        justify-content: center;
+      }
+
+      /* Торт со свечами */
+      .cake-lux-stage {
+        padding: 36px 14px 28px;
+      }
+
+      .cake-viewport-container {
+        height: 320px;
+        margin-bottom: 16px;
+      }
+
+      .cake-interaction-prompt {
+        font-size: 0.82rem;
+        padding: 8px 16px;
+        margin-bottom: 18px;
+      }
+
+      .wish-reveal-inner {
+        padding: 24px 16px;
+      }
+
+      .wish-headline {
+        font-size: 1.35rem;
+      }
+
+      .wish-message {
+        font-size: 1.05rem;
+      }
+
+      /* Финал: поцелуй */
+      .closing-title {
+        font-size: clamp(1.9rem, 8vw, 2.7rem);
+      }
+
+      .closing-lead {
+        font-size: 1.05rem;
+        margin-bottom: 30px;
+      }
+
+      .kiss-send-btn {
+        width: 100%;
+        max-width: 340px;
+        padding: 16px 24px;
+        font-size: 0.82rem;
+        justify-content: center;
+      }
+    }
+
+    /* Дополнительная адаптация для экранов шириной до 420px (iPhone SE, mini и узкие смартфоны) */
+    @media (max-width: 420px) {
+      .countdown-box {
+        padding: 16px 8px;
+        gap: 4px;
+      }
+
+      .cd-number {
+        font-size: 1.9rem;
+      }
+
+      .cd-label {
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+      }
+
+      .cd-unit:not(:last-child)::after {
+        display: none;
+      }
+
+      .ls-title {
+        font-size: 2.2rem;
+      }
+
+      .section-title {
+        font-size: 1.85rem;
+      }
+
+      .hero-heading {
+        font-size: 2.2rem;
+      }
+
+      .key-button {
+        padding: 10px 18px;
+        font-size: 0.72rem;
+      }
     }
   </style>
 </head>
@@ -2584,8 +2874,14 @@
       const canvas = document.getElementById('locked-3d-canvas');
       if (!canvas || !window.THREE) return;
 
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: !isMobileDevice,
+        powerPreference: 'high-performance'
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileDevice ? 1.25 : 1.75));
       renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
       const scene = new THREE.Scene();
@@ -2687,7 +2983,7 @@
         return geo;
       }
 
-      const PETAL_COUNT = 150;
+      const PETAL_COUNT = isMobileDevice ? 75 : 150;
       const petalGeo = createRosePetalGeometry(0.26, 0.38, 8, 10);
       const petalMat = new THREE.MeshStandardMaterial({
         side: THREE.DoubleSide,
@@ -2756,7 +3052,7 @@
         return new THREE.CanvasTexture(c);
       }
 
-      const sparkCount = 90;
+      const sparkCount = isMobileDevice ? 45 : 90;
       const sGeo = new THREE.BufferGeometry();
       const sPos = new Float32Array(sparkCount * 3);
       const sCol = new Float32Array(sparkCount * 3);
@@ -2830,11 +3126,15 @@
       window.addEventListener('pointerup', () => isDragging = false);
       window.addEventListener('pointermove', onPointerMove, { passive: true });
 
+      let lastW = canvas.clientWidth;
+      let lastH = canvas.clientHeight;
       function onResize() {
         if (!canvas) return;
         const w = canvas.clientWidth;
         const h = canvas.clientHeight;
-        if (w > 0 && h > 0) {
+        if (w > 0 && h > 0 && (Math.abs(w - lastW) > 4 || Math.abs(h - lastH) > 60)) {
+          lastW = w;
+          lastH = h;
           camera.aspect = w / h;
           camera.updateProjectionMatrix();
           renderer.setSize(w, h, false);
@@ -2918,8 +3218,14 @@
       if (!canvas || !container || !window.THREE || window._cake3DInitialized) return;
       window._cake3DInitialized = true;
 
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: !isMobileDevice,
+        powerPreference: 'high-performance'
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileDevice ? 1.25 : 1.75));
       renderer.setSize(container.clientWidth, container.clientHeight);
 
       const scene = new THREE.Scene();
@@ -3037,23 +3343,30 @@
       // Вращение торта мышью / пальцем
       let isDraggingCake = false;
       let prevX = 0;
+      let totalCakeDrag = 0;
 
       container.addEventListener('pointerdown', (e) => {
         isDraggingCake = true;
         prevX = e.clientX;
+        totalCakeDrag = 0;
       });
-      window.addEventListener('pointerup', () => isDraggingCake = false);
+      window.addEventListener('pointerup', () => {
+        isDraggingCake = false;
+      });
       window.addEventListener('pointermove', (e) => {
         if (isDraggingCake) {
           const deltaX = e.clientX - prevX;
+          totalCakeDrag += Math.abs(deltaX);
           cakeRoot.rotation.y += deltaX * 0.01;
           prevX = e.clientX;
         }
       });
 
-      // Клик по контейнеру торта задувает свечи
+      // Клик по контейнеру торта задувает свечи (только при осознанном касании, не при вращении)
       container.addEventListener('click', () => {
-        blowOutCandles();
+        if (totalCakeDrag < 10) {
+          blowOutCandles();
+        }
       });
 
       // Цикл рендера торта с оптимизацией через IntersectionObserver
@@ -3089,11 +3402,15 @@
       }
       renderCake();
 
+      let lastCakeW = container.clientWidth;
+      let lastCakeH = container.clientHeight;
       window.addEventListener('resize', () => {
         if (!container) return;
         const w = container.clientWidth;
         const h = container.clientHeight;
-        if (w > 0 && h > 0) {
+        if (w > 0 && h > 0 && (Math.abs(w - lastCakeW) > 4 || Math.abs(h - lastCakeH) > 40)) {
+          lastCakeW = w;
+          lastCakeH = h;
           camera.aspect = w / h;
           camera.updateProjectionMatrix();
           renderer.setSize(w, h, false);
@@ -3117,9 +3434,9 @@
       resize();
       window.addEventListener('resize', resize);
 
-      const isMobile = window.innerWidth < 768;
-      const petalCount = isMobile ? 16 : 30;
-      const stardustCount = isMobile ? 18 : 36;
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+      const petalCount = isMobile ? 12 : 28;
+      const stardustCount = isMobile ? 15 : 34;
 
       // Романтические лепестки роз
       const petals = [];
@@ -3175,6 +3492,10 @@
       }
 
       function loop() {
+        if (document.hidden) {
+          requestAnimationFrame(loop);
+          return;
+        }
         ctx.clearRect(0, 0, W, H);
 
         // Отрисовка парящих лепестков
